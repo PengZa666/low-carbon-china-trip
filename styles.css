@@ -156,10 +156,6 @@ body {
   text-align: center;
 }
 
-.energy-total {
-  white-space: nowrap;
-}
-
 .energy-bar-wrap {
   display: flex;
   align-items: center;
@@ -410,9 +406,9 @@ body {
 
 .btn-depart {
   flex: 1;
-  min-width: 200px;
-  padding: 14px 24px;
-  font-size: 16px;
+  min-width: 140px;
+  padding: 12px 20px;
+  font-size: 15px;
   font-weight: 600;
   font-family: var(--font-sans);
   color: #1a1a1a;
@@ -467,19 +463,21 @@ body {
 }
 
 .btn-charge {
-  padding: 10px 16px;
-  font-size: 14px;
+  min-width: 140px;
+  padding: 12px 20px;
+  font-size: 15px;
   font-weight: 600;
   font-family: var(--font-sans);
   color: #1a1a1a;
   background: linear-gradient(135deg, #6b9bd1, #4a7ab8);
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  box-shadow: 0 2px 6px rgba(74, 122, 184, 0.35);
+  box-shadow: 0 2px 8px rgba(74, 122, 184, 0.35);
   transition: transform 0.15s, box-shadow 0.2s;
 }
 
