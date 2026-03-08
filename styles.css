@@ -73,9 +73,48 @@ body {
   right: 20px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   font-size: 13px;
   color: var(--text-secondary);
+}
+
+.btn-wallet {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background: linear-gradient(135deg, #fff8e6, #fff3cc);
+  border: 1px solid var(--meituan-yellow-dark);
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-wallet:hover {
+  background: linear-gradient(135deg, #fff3cc, var(--meituan-yellow));
+}
+
+.btn-wallet:active {
+  transform: scale(0.98);
+}
+
+.btn-wallet-icon {
+  font-size: 14px;
+}
+
+.btn-wallet-count {
+  background: var(--meituan-yellow);
+  color: #1a1a1a;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 0 5px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
 }
 
 .energy-total {
@@ -511,8 +550,118 @@ body {
   background: rgba(0, 0, 0, 0.05);
 }
 
+/* ========== 卡包弹窗 ========== */
+.wallet-modal {
+  max-width: 380px;
+  max-height: 85vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.wallet-modal .modal-title {
+  margin-bottom: 16px;
+}
+
+.wallet-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-right: 4px;
+}
+
+.wallet-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.wallet-list::-webkit-scrollbar-thumb {
+  background: var(--node-locked);
+  border-radius: 4px;
+}
+
+.wallet-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, #fffcf5, #fff9e6);
+  border: 1px solid rgba(230, 188, 0, 0.4);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+
+.wallet-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 209, 0, 0.25);
+}
+
+.wallet-card-icon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--meituan-yellow), var(--meituan-yellow-dark));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.wallet-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.wallet-card-city {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.wallet-card-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wallet-empty {
+  text-align: center;
+  padding: 32px 20px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.wallet-empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.6;
+}
+
+/* ========== 优惠券详情 ========== */
 .coupon-card .modal-title {
   margin-top: 12px;
+}
+
+.coupon-landmark {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.coupon-tip {
+  margin: 0 0 16px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  opacity: 0.8;
 }
 
 .coupon-icon {

@@ -18,6 +18,9 @@
         <span class="project-title">低碳中国行</span>
       </div>
       <div class="header-right">
+        <button type="button" class="btn-wallet" id="btnWallet" title="我的优惠券">
+          <span class="btn-wallet-icon">🎫</span> 卡包 <span class="btn-wallet-count" id="walletCount">0</span>
+        </button>
         <span class="stat" id="unlockedCount">已解锁城市: 1/18</span>
         <span class="stat energy-total">⚡ 总电量: <span id="totalEnergy">750</span> W</span>
       </div>
@@ -138,12 +141,25 @@
     </div>
   </div>
 
-  <!-- 纪念品/优惠券弹窗 -->
+  <!-- 卡包弹窗：优惠券列表 -->
+  <div class="modal-overlay hidden" id="walletModal">
+    <div class="modal-card glass wallet-modal">
+      <h3 class="modal-title">我的优惠券</h3>
+      <div class="wallet-list" id="walletList">
+        <!-- 动态生成优惠券卡片 -->
+      </div>
+      <button type="button" class="btn-close-modal" id="btnCloseWallet">关闭</button>
+    </div>
+  </div>
+
+  <!-- 纪念品/优惠券详情弹窗 -->
   <div class="modal-overlay hidden" id="couponModal">
     <div class="modal-card glass coupon-card">
       <div class="coupon-icon" id="couponIcon"></div>
       <h3 class="modal-title"><span id="couponCityName">北京</span>专属券</h3>
+      <p class="coupon-landmark" id="couponLandmark">北京地标 · 祈年殿</p>
       <p class="coupon-desc" id="couponDesc">天坛文创满50减10</p>
+      <p class="coupon-tip" id="couponTip">可在该城市合作商户使用</p>
       <button type="button" class="btn-close-modal" id="btnCloseCoupon">收下了</button>
     </div>
   </div>

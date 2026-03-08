@@ -144,6 +144,9 @@
     if (count) count.textContent = '已解锁城市: ' + state.unlockedIds.size + '/' + CITIES.length;
     if (totalEl) totalEl.textContent = state.totalEnergy;
 
+    const walletCount = document.getElementById('walletCount');
+    if (walletCount) walletCount.textContent = state.rewardClaimed.size;
+
     const city = cityById[state.currentCityId];
     if (city) {
       const nameEl = document.getElementById('landmarkName');
@@ -209,15 +212,50 @@
     const modal = document.getElementById('couponModal');
     const nameEl = document.getElementById('couponCityName');
     const descEl = document.getElementById('couponDesc');
+    const landmarkEl = document.getElementById('couponLandmark');
+    const tipEl = document.getElementById('couponTip');
     const iconEl = document.getElementById('couponIcon');
     if (nameEl) nameEl.textContent = city.name;
     if (descEl) descEl.textContent = city.couponDesc;
+    if (landmarkEl) landmarkEl.textContent = city.landmarkDesc || city.landmark;
+    if (tipEl) tipEl.textContent = '可在' + city.name + '合作商户使用';
     if (iconEl) iconEl.textContent = getLandmarkEmoji(city.icon);
     if (modal) modal.classList.remove('hidden');
   }
 
   function hideCouponModal() {
     const modal = document.getElementById('couponModal');
+    if (modal) modal.classList.add('hidden');
+  }
+
+  function showWalletModal() {
+    const modal = document.getElementById('walletModal');
+    const list = document.getElementById('walletList');
+    if (!modal || !list) return;
+    list.innerHTML = '';
+    const claimed = Array.from(state.rewardClaimed).map(id => cityById[id]).filter(Boolean);
+    if (claimed.length === 0) {
+      list.innerHTML = '<div class="wallet-empty"><div class="wallet-empty-icon">🎫</div><p>暂无优惠券<br>骑行到达新城市并领取纪念品即可获得</p></div>';
+    } else {
+      claimed.forEach(city => {
+        const card = document.createElement('div');
+        card.className = 'wallet-card';
+        card.dataset.cityId = city.id;
+        card.innerHTML = '<div class="wallet-card-icon">' + getLandmarkEmoji(city.icon) + '</div>' +
+          '<div class="wallet-card-body"><div class="wallet-card-city">' + city.name + '专属券</div>' +
+          '<div class="wallet-card-desc">' + city.couponDesc + '</div></div>';
+        card.addEventListener('click', () => {
+          hideWalletModal();
+          showCouponModal(city.id);
+        });
+        list.appendChild(card);
+      });
+    }
+    modal.classList.remove('hidden');
+  }
+
+  function hideWalletModal() {
+    const modal = document.getElementById('walletModal');
     if (modal) modal.classList.add('hidden');
   }
 
@@ -262,6 +300,8 @@
   function bindEvents() {
     document.getElementById('btnDepart').addEventListener('click', depart);
     document.getElementById('btnCharge').addEventListener('click', charge);
+    document.getElementById('btnWallet').addEventListener('click', showWalletModal);
+    document.getElementById('btnCloseWallet').addEventListener('click', hideWalletModal);
     document.getElementById('btnClaimReward').addEventListener('click', claimReward);
     document.getElementById('btnCloseModal').addEventListener('click', hideWelcomeModal);
     document.getElementById('btnCloseCoupon').addEventListener('click', () => {
