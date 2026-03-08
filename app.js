@@ -34,6 +34,18 @@
     if (el && typeof CHINA_OUTLINE_PATH !== 'undefined') el.setAttribute('d', CHINA_OUTLINE_PATH);
   }
 
+  function renderProvinceBoundaries() {
+    const g = document.getElementById('provinceBoundariesLayer');
+    if (!g || typeof CHINA_PROVINCE_PATHS === 'undefined') return;
+    g.innerHTML = '';
+    CHINA_PROVINCE_PATHS.forEach(item => {
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', item.path);
+      path.setAttribute('class', 'province-boundary');
+      g.appendChild(path);
+    });
+  }
+
   function renderRoutes() {
     const g = document.getElementById('routesLayer');
     if (!g) return;
@@ -343,6 +355,7 @@
 
   function init() {
     renderChinaOutline();
+    renderProvinceBoundaries();
     renderRoutes();
     renderNodes();
     setAvatarAtCurrentCity();
