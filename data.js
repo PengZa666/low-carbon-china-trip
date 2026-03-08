@@ -69,6 +69,19 @@ const ROUTES = [
   { from: 'harbin', to: 'beijing', distance: 964 }
 ];
 
+// 美团骑行相关优惠券池（到达新城市随机获得其一）
+const MEITUAN_RIDING_COUPONS = [
+  { id: 'free30', title: '免费骑行券', desc: '首单免费骑30分钟', icon: 'bike' },
+  { id: 'discount2', title: '骑行立减券', desc: '单次骑行立减2元', icon: 'bike' },
+  { id: 'weekcard', title: '畅骑体验券', desc: '7天畅骑卡享5折优惠', icon: 'bike' },
+  { id: 'lowcarbon', title: '低碳出行券', desc: '骑行满3次送1次免费骑', icon: 'bike' },
+  { id: 'weekend', title: '周末畅骑券', desc: '周末骑行享5折', icon: 'bike' },
+  { id: 'night', title: '夜间骑行券', desc: '22点后骑行减1元', icon: 'bike' },
+  { id: 'longtrip', title: '长途骑行券', desc: '骑行超5公里减3元', icon: 'bike' },
+  { id: 'invite', title: '邀友共骑券', desc: '邀请好友注册送双人免费骑', icon: 'bike' },
+  { id: 'eco', title: '环保能量券', desc: '积累骑行里程兑换免费时长', icon: 'bike' }
+];
+
 // 单次出发消耗电量
 const FUEL_PER_TRIP = 10;
 // 充电增加量
