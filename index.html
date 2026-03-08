@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>低碳中国行 - 美团单车地图探索版</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="app">
+    <!-- 顶部控制面板 -->
+    <header class="control-panel top-panel">
+      <div class="header-left">
+        <span class="user-name">Rider_Cyber_99</span>
+        <span class="project-title">低碳中国行</span>
+      </div>
+      <div class="header-right">
+        <span class="stat" id="unlockedCount">已解锁城市: 1/18</span>
+        <span class="stat energy-total">⚡ 总电量: <span id="totalEnergy">750</span> W</span>
+      </div>
+      <div class="energy-bar-wrap">
+        <label class="energy-label">当前油量</label>
+        <div class="energy-bar">
+          <div class="energy-fill" id="energyFill"></div>
+        </div>
+        <span class="energy-value" id="energyValue">100/100</span>
+      </div>
+    </header>
+
+    <!-- 地图画布 -->
+    <main class="map-container">
+      <svg class="map-canvas" id="mapSvg" viewBox="0 0 1000 850" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="chinaFill" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#e8eef2" />
+            <stop offset="100%" style="stop-color:#d4dce2" />
+          </linearGradient>
+          <filter id="nodeGlow">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <filter id="nodeGlowStrong">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <!-- 中国轮廓 -->
+        <path id="chinaOutline" class="china-outline" fill="url(#chinaFill)" stroke="#c5cdd4" stroke-width="1" />
+        <!-- 城市间虚线 -->
+        <g id="routesLayer"></g>
+        <!-- 城市节点 -->
+        <g id="nodesLayer"></g>
+        <!-- 骑车小人 -->
+        <g id="avatarLayer">
+          <g class="avatar" id="avatar">
+            <ellipse class="avatar-head" cx="0" cy="-12" rx="6" ry="6" />
+            <path class="avatar-body" d="M -4 0 L 4 2 L 4 14 L -4 14 Z" />
+            <circle class="avatar-wheel-b" cx="-8" cy="18" r="6" />
+            <circle class="avatar-wheel-f" cx="8" cy="18" r="6" />
+            <path class="avatar-pedal" d="M 6 14 L 10 18 M 6 22 L 10 18" />
+          </g>
+        </g>
+      </svg>
+    </main>
+
+    <!-- 中部：当前城市地标 -->
+    <section class="control-panel mid-panel">
+      <div class="landmark-card">
+        <div class="landmark-silhouette" id="landmarkIcon"></div>
+        <h2 class="landmark-name" id="landmarkName">天坛</h2>
+        <p class="landmark-desc" id="landmarkDesc">北京地标 · 祈年殿</p>
+      </div>
+    </section>
+
+    <!-- 底部控制 -->
+    <footer class="control-panel bottom-panel">
+      <div class="bottom-left">
+        <button type="button" class="btn-depart" id="btnDepart">
+          <span class="btn-icon">▷</span> 立即出发 <span class="btn-cost" id="departCost">(-10油量)</span>
+        </button>
+      </div>
+      <div class="reward-status" id="rewardStatus">
+        <span class="reward-check" id="rewardCheck">✓ 已获得<span id="rewardCityName">北京</span>专属券</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- 到达城市弹窗（毛玻璃卡片） -->
+  <div class="modal-overlay hidden" id="welcomeModal">
+    <div class="modal-card glass">
+      <h3 class="modal-title">欢迎来到<span id="modalCityName">北京</span>！</h3>
+      <p class="modal-desc">您已通过低碳骑行跨越了 <strong id="modalDistance">0</strong> 公里。</p>
+      <button type="button" class="btn-reward" id="btnClaimReward">领取纪念品</button>
+      <button type="button" class="btn-close-modal" id="btnCloseModal">稍后再说</button>
+    </div>
+  </div>
+
+  <!-- 纪念品/优惠券弹窗 -->
+  <div class="modal-overlay hidden" id="couponModal">
+    <div class="modal-card glass coupon-card">
+      <div class="coupon-icon" id="couponIcon"></div>
+      <h3 class="modal-title"><span id="couponCityName">北京</span>专属券</h3>
+      <p class="coupon-desc" id="couponDesc">天坛文创满50减10</p>
+      <button type="button" class="btn-close-modal" id="btnCloseCoupon">收下了</button>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

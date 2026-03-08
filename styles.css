@@ -1,0 +1,447 @@
+/* 低碳中国行 - Light & Minimalist */
+:root {
+  --meituan-yellow: #ffd100;
+  --meituan-yellow-dark: #e6bc00;
+  --meituan-yellow-glow: rgba(255, 209, 0, 0.45);
+  --bg-page: #f8f9fb;
+  --bg-panel: #ffffff;
+  --border-light: #e8ecf0;
+  --text-primary: #1a1a1a;
+  --text-secondary: #5c6570;
+  --node-locked: #c5cdd4;
+  --node-unlocked: #ffd100;
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.9);
+  --shadow-soft: 0 2px 12px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --font-sans: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--bg-page);
+  color: var(--text-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-panel);
+  box-shadow: var(--shadow-soft);
+}
+
+/* ========== 顶部面板 ========== */
+.control-panel.top-panel {
+  position: relative;
+  padding: 14px 20px 12px;
+  border-bottom: 1px solid var(--border-light);
+  background: var(--bg-panel);
+}
+
+.header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.user-name {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.project-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.header-right {
+  position: absolute;
+  top: 14px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.energy-total {
+  white-space: nowrap;
+}
+
+.energy-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.energy-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  min-width: 56px;
+}
+
+.energy-bar {
+  flex: 1;
+  height: 10px;
+  background: #e8ecf0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.energy-fill {
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  background: linear-gradient(90deg, var(--meituan-yellow-dark), var(--meituan-yellow));
+  border-radius: 5px;
+  transition: max-width 0.35s ease;
+}
+
+.energy-value {
+  font-size: 12px;
+  color: var(--text-secondary);
+  min-width: 44px;
+  text-align: right;
+}
+
+/* ========== 地图容器 ========== */
+.map-container {
+  flex: 1;
+  min-height: 380px;
+  padding: 16px;
+  position: relative;
+}
+
+.map-canvas {
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  display: block;
+}
+
+.china-outline {
+  transition: fill 0.2s ease;
+}
+
+/* 路线虚线 */
+.route-line {
+  fill: none;
+  stroke: var(--node-locked);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 4;
+  stroke-linecap: round;
+}
+
+/* 城市节点 */
+.city-node {
+  cursor: default;
+  transition: filter 0.25s ease, fill 0.25s ease;
+}
+
+.city-node.locked {
+  fill: var(--node-locked);
+}
+
+.city-node.unlocked {
+  fill: var(--node-unlocked);
+  filter: url(#nodeGlow);
+}
+
+.city-node.unlocked.just-unlocked {
+  animation: nodeUnlock 0.6s ease;
+}
+
+@keyframes nodeUnlock {
+  0% { filter: url(#nodeGlow); opacity: 1; transform: scale(1); }
+  50% { filter: url(#nodeGlowStrong); transform: scale(1.15); }
+  100% { filter: url(#nodeGlow); transform: scale(1); }
+}
+
+.node-label {
+  font-size: 11px;
+  fill: var(--text-secondary);
+  font-family: var(--font-sans);
+  pointer-events: none;
+  user-select: none;
+}
+
+.city-node.unlocked + .node-label {
+  fill: var(--text-primary);
+  font-weight: 500;
+}
+
+/* ========== 骑车小人 ========== */
+#avatarLayer {
+  pointer-events: none;
+}
+
+.avatar {
+  transition: transform 0.1s linear;
+}
+
+.avatar-head {
+  fill: #2d2d2d;
+}
+
+.avatar-body {
+  fill: var(--meituan-yellow);
+  stroke: var(--meituan-yellow-dark);
+  stroke-width: 0.8;
+}
+
+.avatar-wheel-b,
+.avatar-wheel-f {
+  fill: #1a1a1a;
+  stroke: #333;
+  stroke-width: 1;
+}
+
+.avatar-pedal {
+  fill: none;
+  stroke: #333;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+
+/* 骑行动画 */
+.avatar.riding .avatar-pedal {
+  transform-origin: 8px 18px;
+  animation: pedal 0.4s linear infinite;
+}
+
+@keyframes pedal {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(180deg); }
+}
+
+/* ========== 中部地标 ========== */
+.control-panel.mid-panel {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-panel);
+}
+
+.landmark-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.landmark-silhouette {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #6b9bd1 0%, #4a7ab8 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 28px;
+  box-shadow: var(--shadow-soft);
+}
+
+.landmark-name {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.landmark-desc {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ========== 底部面板 ========== */
+.control-panel.bottom-panel {
+  padding: 14px 20px 20px;
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-panel);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-depart {
+  flex: 1;
+  min-width: 200px;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  color: #1a1a1a;
+  background: var(--meituan-yellow);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px var(--meituan-yellow-glow);
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-depart:hover {
+  background: var(--meituan-yellow-dark);
+}
+
+.btn-depart:active {
+  transform: scale(0.98);
+}
+
+.btn-depart:disabled {
+  background: var(--node-locked);
+  color: var(--text-secondary);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-cost {
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.reward-status {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.reward-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ========== 弹窗 ========== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.modal-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modal-card.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 340px;
+  width: 100%;
+  box-shadow: var(--shadow-card);
+}
+
+.modal-title {
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.modal-desc {
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.btn-reward {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  color: #1a1a1a;
+  background: var(--meituan-yellow);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: background 0.2s;
+}
+
+.btn-reward:hover {
+  background: var(--meituan-yellow-dark);
+}
+
+.btn-close-modal,
+.btn-close-coupon {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  font-family: var(--font-sans);
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.btn-close-modal:hover,
+.btn-close-coupon:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.coupon-card .modal-title {
+  margin-top: 12px;
+}
+
+.coupon-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, var(--meituan-yellow), var(--meituan-yellow-dark));
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+
+.coupon-desc {
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+#btnCloseCoupon {
+  margin-top: 4px;
+}
