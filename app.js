@@ -138,11 +138,9 @@
     const fill = document.getElementById('energyFill');
     const value = document.getElementById('energyValue');
     const count = document.getElementById('unlockedCount');
-    const totalEl = document.getElementById('totalEnergy');
     if (fill) fill.style.maxWidth = (state.fuel / MAX_FUEL * 100) + '%';
     if (value) value.textContent = state.fuel + '/' + MAX_FUEL;
     if (count) count.textContent = '已解锁城市: ' + state.unlockedIds.size + '/' + CITIES.length;
-    if (totalEl) totalEl.textContent = state.totalEnergy;
 
     const walletCount = document.getElementById('walletCount');
     if (walletCount) walletCount.textContent = state.rewardClaimed.size;
@@ -312,7 +310,9 @@
     animateAvatarToCity(nextId, (wasNew) => {
       updateUI();
       if (wasNew) {
-        triggerNodeUnlockEffect(nextId);
+        requestAnimationFrame(() => {
+          triggerNodeUnlockEffect(nextId);
+        });
         showWelcomeModal(nextId, distance);
       }
     });

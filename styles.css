@@ -237,13 +237,15 @@ body {
 }
 
 .city-node.unlocked.just-unlocked {
-  animation: nodeUnlock 0.6s ease;
+  animation: nodeUnlock 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
 @keyframes nodeUnlock {
-  0% { filter: url(#nodeGlow); opacity: 1; transform: scale(1); }
-  50% { filter: url(#nodeGlowStrong); transform: scale(1.15); }
-  100% { filter: url(#nodeGlow); transform: scale(1); }
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
 }
 
 .node-label {
