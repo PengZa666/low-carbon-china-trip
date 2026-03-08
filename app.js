@@ -168,6 +168,9 @@
       checkEl.style.display = state.rewardClaimed.has(state.currentCityId) ? 'inline-flex' : 'none';
     }
 
+    const chargeBtn = document.getElementById('btnCharge');
+    if (chargeBtn) chargeBtn.disabled = state.fuel >= MAX_FUEL;
+
     const btn = document.getElementById('btnDepart');
     const costEl = document.getElementById('departCost');
     if (btn) {
@@ -175,7 +178,7 @@
       const canGo = !state.isMoving && state.fuel >= FUEL_PER_TRIP && options.length > 0;
       btn.disabled = !canGo;
     }
-    if (costEl) costEl.textContent = '(-' + FUEL_PER_TRIP + '油量)';
+    if (costEl) costEl.textContent = '(-' + FUEL_PER_TRIP + '电量)';
 
     renderNodes();
     setAvatarAtCurrentCity();
@@ -250,8 +253,17 @@
     });
   }
 
+  function charge() {
+    if (state.fuel >= MAX_FUEL) return;
+    const amt = typeof CHARGE_AMOUNT !== 'undefined' ? CHARGE_AMOUNT : 20;
+    state.fuel = Math.min(MAX_FUEL, state.fuel + amt);
+    state.totalEnergy += 15;
+    updateUI();
+  }
+
   function bindEvents() {
     document.getElementById('btnDepart').addEventListener('click', depart);
+    document.getElementById('btnCharge').addEventListener('click', charge);
     document.getElementById('btnClaimReward').addEventListener('click', claimReward);
     document.getElementById('btnCloseModal').addEventListener('click', hideWelcomeModal);
     document.getElementById('btnCloseCoupon').addEventListener('click', () => {

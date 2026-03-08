@@ -185,7 +185,7 @@ body {
   font-weight: 500;
 }
 
-/* ========== 骑车小人 ========== */
+/* ========== 骑车小人（美团单车风格精细化）========== */
 #avatarLayer {
   pointer-events: none;
 }
@@ -195,38 +195,87 @@ body {
 }
 
 .avatar-head {
-  fill: #2d2d2d;
+  fill: #3a3a3a;
 }
 
-.avatar-body {
+.avatar-helmet {
   fill: var(--meituan-yellow);
   stroke: var(--meituan-yellow-dark);
-  stroke-width: 0.8;
+  stroke-width: 0.6;
 }
 
-.avatar-wheel-b,
-.avatar-wheel-f {
-  fill: #1a1a1a;
-  stroke: #333;
-  stroke-width: 1;
+.avatar-torso {
+  fill: #4a90d9;
+  stroke: #3a7bc8;
+  stroke-width: 0.5;
 }
 
-.avatar-pedal {
+.avatar-arm {
   fill: none;
-  stroke: #333;
-  stroke-width: 1.2;
+  stroke: #4a90d9;
+  stroke-width: 1.5;
   stroke-linecap: round;
 }
 
-/* 骑行动画 */
-.avatar.riding .avatar-pedal {
-  transform-origin: 8px 18px;
-  animation: pedal 0.4s linear infinite;
+.avatar-frame {
+  fill: none;
+  stroke: #2d2d2d;
+  stroke-width: 1.8;
+  stroke-linecap: round;
 }
 
-@keyframes pedal {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(180deg); }
+.avatar-seat {
+  fill: var(--meituan-yellow);
+  stroke: var(--meituan-yellow-dark);
+  stroke-width: 0.5;
+}
+
+.avatar-wheel-outer {
+  fill: none;
+  stroke: #2d2d2d;
+  stroke-width: 2;
+}
+
+.avatar-wheel-inner {
+  fill: #1a1a1a;
+  stroke: #333;
+  stroke-width: 0.8;
+}
+
+.avatar-spoke {
+  stroke: #555;
+  stroke-width: 0.8;
+}
+
+.avatar-crank line {
+  stroke: #2d2d2d;
+}
+
+.avatar-pedal-circle {
+  fill: #ffd100;
+  stroke: #e6bc00;
+  stroke-width: 0.5;
+}
+
+/* 骑行动画：曲柄旋转 */
+.avatar.riding .avatar-crank {
+  transform-origin: 5px 4px;
+  animation: crankRotate 0.5s linear infinite;
+}
+
+.avatar.riding .avatar-crank-b {
+  transform-origin: 100% 0;
+  animation: crankRotateB 0.5s linear infinite;
+}
+
+@keyframes crankRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes crankRotateB {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* ========== 中部地标 ========== */
@@ -322,6 +371,12 @@ body {
   opacity: 0.9;
 }
 
+.bottom-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .reward-status {
   font-size: 13px;
   color: var(--text-secondary);
@@ -331,6 +386,43 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+}
+
+.btn-charge {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  color: #1a1a1a;
+  background: linear-gradient(135deg, #6b9bd1, #4a7ab8);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(74, 122, 184, 0.35);
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+
+.btn-charge:hover {
+  box-shadow: 0 3px 10px rgba(74, 122, 184, 0.45);
+}
+
+.btn-charge:active {
+  transform: scale(0.96);
+}
+
+.btn-charge:disabled {
+  background: var(--node-locked);
+  color: var(--text-secondary);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-charge-value {
+  font-size: 12px;
+  opacity: 0.95;
 }
 
 /* ========== 弹窗 ========== */
