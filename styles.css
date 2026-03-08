@@ -117,6 +117,45 @@ body {
   text-align: center;
 }
 
+.btn-city-cards {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background: linear-gradient(135deg, #e8f4fc, #d4e8f7);
+  border: 1px solid #4a7ab8;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-city-cards:hover {
+  background: linear-gradient(135deg, #d4e8f7, #6b9bd1);
+}
+
+.btn-city-cards:active {
+  transform: scale(0.98);
+}
+
+.btn-city-cards-icon {
+  font-size: 14px;
+}
+
+.btn-city-cards-count {
+  background: linear-gradient(135deg, #6b9bd1, #4a7ab8);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 0 5px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+
 .energy-total {
   white-space: nowrap;
 }
@@ -548,6 +587,103 @@ body {
 .btn-close-modal:hover,
 .btn-close-coupon:hover {
   background: rgba(0, 0, 0, 0.05);
+}
+
+/* ========== 城市卡片弹窗 ========== */
+.city-cards-modal {
+  max-width: 380px;
+  max-height: 85vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.city-cards-modal .modal-title {
+  margin-bottom: 4px;
+}
+
+.city-cards-subtitle {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.city-cards-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-right: 4px;
+}
+
+.city-cards-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.city-cards-list::-webkit-scrollbar-thumb {
+  background: var(--node-locked);
+  border-radius: 4px;
+}
+
+.city-card-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, #f5f9fc, #eef5fb);
+  border: 1px solid rgba(74, 122, 184, 0.35);
+  border-radius: 12px;
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+
+.city-card-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(74, 122, 184, 0.2);
+}
+
+.city-card-icon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #6b9bd1, #4a7ab8);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.city-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.city-card-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.city-card-landmark {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.city-cards-empty {
+  text-align: center;
+  padding: 32px 20px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.city-cards-empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.6;
 }
 
 /* ========== 卡包弹窗 ========== */

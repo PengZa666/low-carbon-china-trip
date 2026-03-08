@@ -147,6 +147,9 @@
     const walletCount = document.getElementById('walletCount');
     if (walletCount) walletCount.textContent = state.rewardClaimed.size;
 
+    const cityCardsCount = document.getElementById('cityCardsCount');
+    if (cityCardsCount) cityCardsCount.textContent = state.unlockedIds.size;
+
     const city = cityById[state.currentCityId];
     if (city) {
       const nameEl = document.getElementById('landmarkName');
@@ -259,6 +262,32 @@
     if (modal) modal.classList.add('hidden');
   }
 
+  function showCityCardsModal() {
+    const modal = document.getElementById('cityCardsModal');
+    const list = document.getElementById('cityCardsList');
+    if (!modal || !list) return;
+    list.innerHTML = '';
+    const unlocked = Array.from(state.unlockedIds).map(id => cityById[id]).filter(Boolean);
+    if (unlocked.length === 0) {
+      list.innerHTML = '<div class="city-cards-empty"><div class="city-cards-empty-icon">📍</div><p>暂无打卡城市<br>点击「立即出发」骑行解锁新城市</p></div>';
+    } else {
+      unlocked.forEach(city => {
+        const item = document.createElement('div');
+        item.className = 'city-card-item';
+        item.innerHTML = '<div class="city-card-icon">' + getLandmarkEmoji(city.icon) + '</div>' +
+          '<div class="city-card-body"><div class="city-card-name">' + city.name + '</div>' +
+          '<div class="city-card-landmark">' + city.landmark + ' · ' + city.landmarkDesc + '</div></div>';
+        list.appendChild(item);
+      });
+    }
+    modal.classList.remove('hidden');
+  }
+
+  function hideCityCardsModal() {
+    const modal = document.getElementById('cityCardsModal');
+    if (modal) modal.classList.add('hidden');
+  }
+
   function claimReward() {
     if (!state.welcomeModalPending) return;
     const { cityId } = state.welcomeModalPending;
@@ -300,6 +329,8 @@
   function bindEvents() {
     document.getElementById('btnDepart').addEventListener('click', depart);
     document.getElementById('btnCharge').addEventListener('click', charge);
+    document.getElementById('btnCityCards').addEventListener('click', showCityCardsModal);
+    document.getElementById('btnCloseCityCards').addEventListener('click', hideCityCardsModal);
     document.getElementById('btnWallet').addEventListener('click', showWalletModal);
     document.getElementById('btnCloseWallet').addEventListener('click', hideWalletModal);
     document.getElementById('btnClaimReward').addEventListener('click', claimReward);

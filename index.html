@@ -18,6 +18,9 @@
         <span class="project-title">低碳中国行</span>
       </div>
       <div class="header-right">
+        <button type="button" class="btn-city-cards" id="btnCityCards" title="已打卡城市">
+          <span class="btn-city-cards-icon">📍</span> 城市卡片 <span class="btn-city-cards-count" id="cityCardsCount">0</span>
+        </button>
         <button type="button" class="btn-wallet" id="btnWallet" title="我的优惠券">
           <span class="btn-wallet-icon">🎫</span> 卡包 <span class="btn-wallet-count" id="walletCount">0</span>
         </button>
@@ -138,6 +141,18 @@
       <p class="modal-desc">您已通过低碳骑行跨越了 <strong id="modalDistance">0</strong> 公里。</p>
       <button type="button" class="btn-reward" id="btnClaimReward">领取纪念品</button>
       <button type="button" class="btn-close-modal" id="btnCloseModal">稍后再说</button>
+    </div>
+  </div>
+
+  <!-- 城市卡片弹窗：已打卡城市与地标 -->
+  <div class="modal-overlay hidden" id="cityCardsModal">
+    <div class="modal-card glass city-cards-modal">
+      <h3 class="modal-title">我的城市卡片</h3>
+      <p class="city-cards-subtitle">已解锁的城市与地标</p>
+      <div class="city-cards-list" id="cityCardsList">
+        <!-- 动态生成城市卡片 -->
+      </div>
+      <button type="button" class="btn-close-modal" id="btnCloseCityCards">关闭</button>
     </div>
   </div>
 
