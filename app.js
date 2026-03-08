@@ -197,7 +197,11 @@
   }
 
   function getLandmarkEmoji(icon) {
-    const map = { temple: '🏯', tower: '🗼', pagoda: '⛩️', panda: '🐼', church: '⛪', mountain: '⛰️', palm: '🌴', gate: '🚪', bridge: '🌉' };
+    const map = {
+      temple: '🏯', tower: '🗼', pagoda: '⛩️', panda: '🐼', church: '⛪', mountain: '⛰️', palm: '🌴', gate: '🚪', bridge: '🌉',
+      art: '🎨', antique: '🏺', grassland: '🌾', palace: '🏛️', lake: '🌊', lotus: '🪷', street: '🏘️', fountain: '⛲',
+      monument: '🗿', crane: '🦅', book: '📚', skyline: '🌃', lantern: '🏮', stone: '🪨', castle: '🏰', wheel: '☸️', drum: '🥁', desert: '🏜️'
+    };
     return map[icon] || '📍';
   }
 
