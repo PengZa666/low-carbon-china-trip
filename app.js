@@ -19,14 +19,9 @@
   const cityById = {};
   CITIES.forEach(c => { cityById[c.id] = c; });
 
+  // 单向链：仅返回当前城市的下一个目的地
   function getNextCityOptions() {
-    return ROUTES.filter(r => {
-      const fromCurrent = r.from === state.currentCityId;
-      const toCurrent = r.to === state.currentCityId;
-      if (!fromCurrent && !toCurrent) return false;
-      const nextId = fromCurrent ? r.to : r.from;
-      return !state.unlockedIds.has(nextId);
-    });
+    return ROUTES.filter(r => r.from === state.currentCityId);
   }
 
   function getRouteDistance(fromId, toId) {
@@ -66,12 +61,12 @@
       const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       circle.setAttribute('cx', city.x);
       circle.setAttribute('cy', city.y);
-      circle.setAttribute('r', 14);
+      circle.setAttribute('r', 8);
       circle.setAttribute('class', 'city-node ' + (state.unlockedIds.has(city.id) ? 'unlocked' : 'locked'));
       gNode.appendChild(circle);
       const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       label.setAttribute('x', city.x);
-      label.setAttribute('y', city.y + 28);
+      label.setAttribute('y', city.y + 22);
       label.setAttribute('text-anchor', 'middle');
       label.setAttribute('class', 'node-label');
       label.textContent = city.name;
@@ -116,9 +111,10 @@
       } else {
         if (avatar) avatar.classList.remove('riding');
         state.currentCityId = toCityId;
+        const wasNew = !state.unlockedIds.has(toCityId);
         state.unlockedIds.add(toCityId);
         state.isMoving = false;
-        if (onComplete) onComplete();
+        if (onComplete) onComplete(wasNew);
       }
     }
     requestAnimationFrame(tick);
@@ -246,10 +242,12 @@
     state.totalEnergy += 30;
     updateUI();
 
-    animateAvatarToCity(nextId, () => {
+    animateAvatarToCity(nextId, (wasNew) => {
       updateUI();
-      triggerNodeUnlockEffect(nextId);
-      showWelcomeModal(nextId, distance);
+      if (wasNew) {
+        triggerNodeUnlockEffect(nextId);
+        showWelcomeModal(nextId, distance);
+      }
     });
   }
 

@@ -23,33 +23,27 @@ const CITIES = [
   { id: 'shenzhen', name: '深圳', x: 647, y: 653, landmark: '市民中心', landmarkDesc: '创新之城', couponDesc: '商圈餐饮满100减25', icon: 'tower' }
 ];
 
-// 路线：相邻城市可通行，并带有大致里程(用于展示)
+// 环游中国：单向链式路线，每城市仅有一前一后，形成闭环
+// 格式：{ from, to, distance } 表示从 from 单向到 to
 const ROUTES = [
   { from: 'beijing', to: 'harbin', distance: 1200 },
-  { from: 'beijing', to: 'shenyang', distance: 650 },
-  { from: 'beijing', to: 'zhengzhou', distance: 700 },
-  { from: 'beijing', to: 'xian', distance: 1100 },
-  { from: 'shanghai', to: 'nanjing', distance: 300 },
-  { from: 'shanghai', to: 'hangzhou', distance: 180 },
-  { from: 'hangzhou', to: 'nanjing', distance: 280 },
-  { from: 'hangzhou', to: 'wuhan', distance: 750 },
-  { from: 'guangzhou', to: 'shenzhen', distance: 140 },
-  { from: 'guangzhou', to: 'changsha', distance: 660 },
-  { from: 'chengdu', to: 'xian', distance: 720 },
-  { from: 'chengdu', to: 'chongqing', distance: 310 },
-  { from: 'chengdu', to: 'kunming', distance: 850 },
-  { from: 'wuhan', to: 'zhengzhou', distance: 520 },
-  { from: 'wuhan', to: 'changsha', distance: 350 },
-  { from: 'wuhan', to: 'nanjing', distance: 520 },
-  { from: 'xian', to: 'lanzhou', distance: 630 },
-  { from: 'xian', to: 'zhengzhou', distance: 480 },
   { from: 'harbin', to: 'shenyang', distance: 550 },
-  { from: 'urumqi', to: 'lanzhou', distance: 1900 },
-  { from: 'lanzhou', to: 'xian', distance: 630 },
-  { from: 'chongqing', to: 'wuhan', distance: 880 },
-  { from: 'changsha', to: 'guangzhou', distance: 660 },
-  { from: 'haikou', to: 'guangzhou', distance: 550 },
-  { from: 'shenzhen', to: 'guangzhou', distance: 140 }
+  { from: 'shenyang', to: 'zhengzhou', distance: 1200 },
+  { from: 'zhengzhou', to: 'xian', distance: 480 },
+  { from: 'xian', to: 'lanzhou', distance: 630 },
+  { from: 'lanzhou', to: 'urumqi', distance: 1900 },
+  { from: 'urumqi', to: 'chengdu', distance: 2500 },
+  { from: 'chengdu', to: 'chongqing', distance: 310 },
+  { from: 'chongqing', to: 'kunming', distance: 880 },
+  { from: 'kunming', to: 'guangzhou', distance: 1400 },
+  { from: 'guangzhou', to: 'shenzhen', distance: 140 },
+  { from: 'shenzhen', to: 'haikou', distance: 550 },
+  { from: 'haikou', to: 'changsha', distance: 1200 },
+  { from: 'changsha', to: 'wuhan', distance: 350 },
+  { from: 'wuhan', to: 'nanjing', distance: 520 },
+  { from: 'nanjing', to: 'shanghai', distance: 300 },
+  { from: 'shanghai', to: 'hangzhou', distance: 180 },
+  { from: 'hangzhou', to: 'beijing', distance: 1300 }
 ];
 
 // 单次出发消耗电量
