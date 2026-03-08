@@ -32,35 +32,35 @@ const CITIES = [
   { id: 'urumqi', name: '乌鲁木齐', x: 236, y: 240, landmark: '红山', landmarkDesc: '西域风情', couponDesc: '新疆美食券', icon: 'mountain' }
 ];
 
-// 环游中国：单向链式路线，每城市仅有一前一后，形成闭环
+// 环游中国：最短路径闭环（TSP 近似优化）
 const ROUTES = [
-  { from: 'beijing', to: 'shijiazhuang', distance: 280 },
-  { from: 'shijiazhuang', to: 'taiyuan', distance: 220 },
-  { from: 'taiyuan', to: 'hohhot', distance: 470 },
-  { from: 'hohhot', to: 'shenyang', distance: 780 },
-  { from: 'shenyang', to: 'changchun', distance: 310 },
-  { from: 'changchun', to: 'harbin', distance: 280 },
-  { from: 'harbin', to: 'jinan', distance: 1500 },
-  { from: 'jinan', to: 'zhengzhou', distance: 510 },
-  { from: 'zhengzhou', to: 'xian', distance: 510 },
-  { from: 'xian', to: 'lanzhou', distance: 630 },
-  { from: 'lanzhou', to: 'xining', distance: 220 },
-  { from: 'xining', to: 'yinchuan', distance: 580 },
-  { from: 'yinchuan', to: 'urumqi', distance: 1900 },
-  { from: 'urumqi', to: 'lhasa', distance: 2500 },
-  { from: 'lhasa', to: 'chengdu', distance: 2000 },
-  { from: 'chengdu', to: 'guiyang', distance: 690 },
-  { from: 'guiyang', to: 'kunming', distance: 520 },
-  { from: 'kunming', to: 'nanning', distance: 830 },
-  { from: 'nanning', to: 'haikou', distance: 550 },
-  { from: 'haikou', to: 'guangzhou', distance: 550 },
-  { from: 'guangzhou', to: 'changsha', distance: 660 },
-  { from: 'changsha', to: 'wuhan', distance: 350 },
-  { from: 'wuhan', to: 'nanjing', distance: 500 },
-  { from: 'nanjing', to: 'shanghai', distance: 300 },
-  { from: 'shanghai', to: 'hangzhou', distance: 180 },
-  { from: 'hangzhou', to: 'fuzhou', distance: 680 },
-  { from: 'fuzhou', to: 'beijing', distance: 1700 }
+  { from: 'beijing', to: 'hohhot', distance: 352 },
+  { from: 'hohhot', to: 'shijiazhuang', distance: 356 },
+  { from: 'shijiazhuang', to: 'taiyuan', distance: 146 },
+  { from: 'taiyuan', to: 'xian', distance: 463 },
+  { from: 'xian', to: 'yinchuan', distance: 486 },
+  { from: 'yinchuan', to: 'lanzhou', distance: 310 },
+  { from: 'lanzhou', to: 'xining', distance: 160 },
+  { from: 'xining', to: 'urumqi', distance: 1280 },
+  { from: 'urumqi', to: 'lhasa', distance: 1528 },
+  { from: 'lhasa', to: 'chengdu', distance: 947 },
+  { from: 'chengdu', to: 'kunming', distance: 611 },
+  { from: 'kunming', to: 'nanning', distance: 476 },
+  { from: 'nanning', to: 'haikou', distance: 328 },
+  { from: 'haikou', to: 'guangzhou', distance: 393 },
+  { from: 'guangzhou', to: 'fuzhou', distance: 538 },
+  { from: 'fuzhou', to: 'guiyang', distance: 924 },
+  { from: 'guiyang', to: 'changsha', distance: 490 },
+  { from: 'changsha', to: 'wuhan', distance: 267 },
+  { from: 'wuhan', to: 'hangzhou', distance: 429 },
+  { from: 'hangzhou', to: 'shanghai', distance: 137 },
+  { from: 'shanghai', to: 'nanjing', distance: 219 },
+  { from: 'nanjing', to: 'zhengzhou', distance: 466 },
+  { from: 'zhengzhou', to: 'jinan', distance: 319 },
+  { from: 'jinan', to: 'shenyang', distance: 718 },
+  { from: 'shenyang', to: 'changchun', distance: 261 },
+  { from: 'changchun', to: 'harbin', distance: 220 },
+  { from: 'harbin', to: 'beijing', distance: 964 }
 ];
 
 // 单次出发消耗电量
