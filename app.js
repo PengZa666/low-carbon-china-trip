@@ -46,6 +46,22 @@
     });
   }
 
+  function renderProvinceFills() {
+    const g = document.getElementById('provinceFillLayer');
+    if (!g || typeof CHINA_PROVINCE_PATHS === 'undefined') return;
+    const highlightedAdcodes = new Set();
+    CITIES.forEach(c => {
+      if (c.provinceAdcode && state.unlockedIds.has(c.id)) highlightedAdcodes.add(c.provinceAdcode);
+    });
+    g.innerHTML = '';
+    CHINA_PROVINCE_PATHS.forEach(item => {
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', item.path);
+      path.setAttribute('class', 'province-fill' + (highlightedAdcodes.has(item.adcode) ? ' province-highlighted' : ''));
+      g.appendChild(path);
+    });
+  }
+
   function renderRoutes() {
     const g = document.getElementById('routesLayer');
     if (!g) return;
@@ -193,6 +209,7 @@
     if (costEl) costEl.textContent = '(-' + FUEL_PER_TRIP + '电量)';
 
     renderNodes();
+    renderProvinceFills();
     setAvatarAtCurrentCity();
   }
 
@@ -200,7 +217,8 @@
     const map = {
       temple: '🏯', tower: '🗼', pagoda: '⛩️', panda: '🐼', church: '⛪', mountain: '⛰️', palm: '🌴', gate: '🚪', bridge: '🌉',
       art: '🎨', antique: '🏺', grassland: '🌾', palace: '🏛️', lake: '🌊', lotus: '🪷', street: '🏘️', fountain: '⛲',
-      monument: '🗿', crane: '🦅', book: '📚', skyline: '🌃', lantern: '🏮', stone: '🪨', castle: '🏰', wheel: '☸️', drum: '🥁', desert: '🏜️'
+      monument: '🗿', crane: '🦅', book: '📚', skyline: '🌃', lantern: '🏮', stone: '🪨', castle: '🏰', wheel: '☸️', drum: '🥁', desert: '🏜️',
+      pavilion: '🏛️', building: '🏢', garden: '🌳'
     };
     return map[icon] || '📍';
   }
@@ -360,6 +378,7 @@
   function init() {
     renderChinaOutline();
     renderProvinceBoundaries();
+    renderProvinceFills();
     renderRoutes();
     renderNodes();
     setAvatarAtCurrentCity();

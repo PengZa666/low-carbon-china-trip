@@ -24,7 +24,7 @@
         <button type="button" class="btn-wallet" id="btnWallet" title="我的优惠券">
           <span class="btn-wallet-icon">🎫</span> 卡包 <span class="btn-wallet-count" id="walletCount">0</span>
         </button>
-        <span class="stat" id="unlockedCount">已解锁城市: 1/27</span>
+        <span class="stat" id="unlockedCount">已解锁城市: 1/30</span>
       </div>
       <div class="energy-bar-wrap">
         <label class="energy-label">当前电量</label>
@@ -60,6 +60,8 @@
         </defs>
         <!-- 中国轮廓 -->
         <path id="chinaOutline" class="china-outline" fill="url(#chinaFill)" stroke="#c5cdd4" stroke-width="1" />
+        <!-- 省份填充层（点亮效果） -->
+        <g id="provinceFillLayer"></g>
         <!-- 省份分界线（虚线） -->
         <g id="provinceBoundariesLayer"></g>
         <!-- 城市间虚线 -->
