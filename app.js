@@ -26,26 +26,6 @@
   const cityById = {};
   CITIES.forEach(c => { cityById[c.id] = c; });
 
-  const SKIP_REWARD_ANIM_KEY = 'lowCarbon_skipRewardAnim';
-  let skipRewardAnimPreference = (function () {
-    try {
-      return localStorage.getItem(SKIP_REWARD_ANIM_KEY) === '1';
-    } catch (e) {
-      return false;
-    }
-  })();
-
-  function getSkipRewardAnimPreference() {
-    return skipRewardAnimPreference;
-  }
-
-  function setSkipRewardAnimPreference(checked) {
-    skipRewardAnimPreference = !!checked;
-    try {
-      localStorage.setItem(SKIP_REWARD_ANIM_KEY, checked ? '1' : '0');
-    } catch (e) {}
-  }
-
   // 单向链：仅返回当前城市的下一个目的地
   function getNextCityOptions() {
     return ROUTES.filter(r => r.from === state.currentCityId);
@@ -256,47 +236,6 @@
     return '🎫';
   }
 
-  function showArrivalModal(cityId, distance, coupon) {
-    const city = cityById[cityId];
-    if (!city || !coupon) return;
-    const chk = document.getElementById('chkSkipRewardAnim');
-    if (chk) {
-      chk.checked = getSkipRewardAnimPreference();
-      chk.onchange = function () {
-        setSkipRewardAnimPreference(chk.checked);
-      };
-    }
-    const modal = document.getElementById('arrivalModal');
-    const nameEl = document.getElementById('arrivalCityName');
-    const distEl = document.getElementById('arrivalDistance');
-    const iconEl = document.getElementById('arrivalLandmarkIcon');
-    const titleEl = document.getElementById('arrivalLandmarkTitle');
-    const descEl = document.getElementById('arrivalLandmarkDesc');
-    const couponIconEl = document.getElementById('arrivalCouponIcon');
-    const couponTitleEl = document.getElementById('arrivalCouponTitle');
-    const couponDescEl = document.getElementById('arrivalCouponDesc');
-    if (nameEl) nameEl.textContent = city.name;
-    if (distEl) distEl.textContent = distance;
-    if (iconEl) iconEl.textContent = getLandmarkEmoji(city.icon);
-    if (titleEl) titleEl.textContent = city.name + ' · ' + city.landmark;
-    if (descEl) descEl.textContent = city.landmarkDesc;
-    if (couponIconEl) couponIconEl.textContent = getCouponEmoji(coupon.icon);
-    if (couponTitleEl) couponTitleEl.textContent = coupon.title;
-    if (couponDescEl) couponDescEl.textContent = coupon.desc;
-    if (modal) {
-      modal.classList.remove('hidden');
-      modal.style.display = 'flex';
-    }
-  }
-
-  function hideArrivalModal() {
-    const modal = document.getElementById('arrivalModal');
-    if (modal) {
-      modal.classList.add('hidden');
-      modal.style.display = '';
-    }
-  }
-
   function showCouponDetailInWallet(coupon, count) {
     if (!coupon) return;
     const modal = document.getElementById('couponModal');
@@ -436,7 +375,6 @@
     if (state.isMoving || state.fuel < FUEL_PER_TRIP || options.length === 0) return;
     const chosen = options[0];
     const nextId = chosen.from === state.currentCityId ? chosen.to : chosen.from;
-    const distance = chosen.distance;
 
     state.fuel -= FUEL_PER_TRIP;
     state.totalEnergy += 30;
@@ -450,15 +388,8 @@
         state.totalEnergy += 50;
         requestAnimationFrame(() => {
           triggerNodeUnlockEffect(nextId);
-          requestAnimationFrame(() => {
-            if (getSkipRewardAnimPreference()) {
-              updateUI();
-              checkAndShowGrandPrize();
-            } else {
-              showArrivalModal(nextId, distance, coupon);
-              updateUI();
-            }
-          });
+          updateUI();
+          checkAndShowGrandPrize();
         });
       }
     });
@@ -479,13 +410,6 @@
     document.getElementById('btnCloseCityCards').addEventListener('click', hideCityCardsModal);
     document.getElementById('btnWallet').addEventListener('click', showWalletModal);
     document.getElementById('btnCloseWallet').addEventListener('click', hideWalletModal);
-    document.getElementById('btnArrivalClose').addEventListener('click', () => {
-      const chk = document.getElementById('chkSkipRewardAnim');
-      if (chk) setSkipRewardAnimPreference(chk.checked);
-      hideArrivalModal();
-      checkAndShowGrandPrize();
-      updateUI();
-    });
     document.getElementById('btnCloseCoupon').addEventListener('click', () => {
       hideCouponModal();
       updateUI();
