@@ -253,10 +253,8 @@
     const modal = document.getElementById('welcomeModal');
     const nameEl = document.getElementById('modalCityName');
     const distEl = document.getElementById('modalDistance');
-    const chk = document.getElementById('chkAutoSaveReward');
     if (nameEl) nameEl.textContent = city.name;
     if (distEl) distEl.textContent = distance;
-    if (chk) chk.checked = getAutoSaveRewardPreference();
     if (modal) modal.classList.remove('hidden');
   }
 
@@ -282,6 +280,7 @@
     const landmarkEl = document.getElementById('couponLandmark');
     const tipEl = document.getElementById('couponTip');
     const iconEl = document.getElementById('couponIcon');
+    const chk = document.getElementById('chkAutoSaveReward');
     if (nameEl) nameEl.textContent = count > 1 ? coupon.title + ' ×' + count : coupon.title;
     if (descEl) descEl.textContent = coupon.desc;
     if (landmarkEl) {
@@ -295,6 +294,7 @@
     }
     if (tipEl) tipEl.textContent = '可在美团骑行APP内使用';
     if (iconEl) iconEl.textContent = getCouponEmoji(coupon.icon);
+    if (chk) chk.checked = getAutoSaveRewardPreference();
     if (modal) modal.classList.remove('hidden');
   }
 
@@ -427,14 +427,12 @@
   function claimReward() {
     if (!state.welcomeModalPending) return;
     const { cityId } = state.welcomeModalPending;
-    const chk = document.getElementById('chkAutoSaveReward');
-    if (chk && chk.checked) setAutoSaveRewardPreference(true);
     hideWelcomeModal(true);
     const coupon = pickRandomCoupon();
     state.rewardClaimed.set(cityId, coupon);
     state.totalEnergy += 50;
+    showCouponModal(coupon, 1);
     updateUI();
-    checkAndShowGrandPrize();
   }
 
   function depart() {
@@ -485,7 +483,10 @@
     document.getElementById('btnClaimReward').addEventListener('click', claimReward);
     document.getElementById('btnCloseModal').addEventListener('click', hideWelcomeModal);
     document.getElementById('btnCloseCoupon').addEventListener('click', () => {
+      const chk = document.getElementById('chkAutoSaveReward');
+      if (chk && chk.checked) setAutoSaveRewardPreference(true);
       hideCouponModal();
+      checkAndShowGrandPrize();
       updateUI();
     });
   }
