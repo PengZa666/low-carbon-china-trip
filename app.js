@@ -26,22 +26,6 @@
   const cityById = {};
   CITIES.forEach(c => { cityById[c.id] = c; });
 
-  const AUTO_SAVE_KEY = 'lowCarbon_autoSaveReward';
-
-  function getAutoSaveRewardPreference() {
-    try {
-      return localStorage.getItem(AUTO_SAVE_KEY) === '1';
-    } catch (e) {
-      return false;
-    }
-  }
-
-  function setAutoSaveRewardPreference(checked) {
-    try {
-      localStorage.setItem(AUTO_SAVE_KEY, checked ? '1' : '0');
-    } catch (e) {}
-  }
-
   // 单向链：仅返回当前城市的下一个目的地
   function getNextCityOptions() {
     return ROUTES.filter(r => r.from === state.currentCityId);
@@ -246,64 +230,58 @@
     return map[icon] || '📍';
   }
 
-  function showWelcomeModal(cityId, distance) {
-    const city = cityById[cityId];
-    if (!city) return;
-    state.welcomeModalPending = { cityId, distance };
-    const modal = document.getElementById('welcomeModal');
-    const nameEl = document.getElementById('modalCityName');
-    const distEl = document.getElementById('modalDistance');
-    if (nameEl) nameEl.textContent = city.name;
-    if (distEl) distEl.textContent = distance;
-    if (modal) modal.classList.remove('hidden');
-  }
-
-  function hideWelcomeModal(skipGrandPrizeCheck) {
-    const modal = document.getElementById('welcomeModal');
-    if (modal) modal.classList.add('hidden');
-    state.welcomeModalPending = null;
-    if (!skipGrandPrizeCheck) checkAndShowGrandPrize();
-  }
-
   function getCouponEmoji(icon) {
     if (icon === 'bike') return '🚴';
     if (icon === 'monthly') return '👑';
     return '🎫';
   }
 
-  function showCouponModal(coupon, count, cityId) {
-    if (!coupon) return;
-    if (typeof count !== 'number') count = 1;
-    const modal = document.getElementById('couponModal');
-    const landmarkSection = document.getElementById('landmarkCardSection');
-    const landmarkIconEl = document.getElementById('landmarkCardIcon');
-    const landmarkTitleEl = document.getElementById('landmarkCardTitle');
-    const landmarkDescEl = document.getElementById('landmarkCardDesc');
-    const nameEl = document.getElementById('couponCityName');
-    const descEl = document.getElementById('couponDesc');
-    const tipEl = document.getElementById('couponTip');
-    const iconEl = document.getElementById('couponIcon');
-    const chk = document.getElementById('chkAutoSaveReward');
-
-    if (cityId && cityById[cityId]) {
-      const city = cityById[cityId];
-      if (landmarkSection) landmarkSection.style.display = '';
-      if (landmarkIconEl) landmarkIconEl.textContent = getLandmarkEmoji(city.icon);
-      if (landmarkTitleEl) landmarkTitleEl.textContent = city.name + ' · ' + city.landmark;
-      if (landmarkDescEl) landmarkDescEl.textContent = city.landmarkDesc;
-    } else {
-      if (landmarkSection) landmarkSection.style.display = 'none';
-    }
-
-    if (nameEl) nameEl.textContent = count > 1 ? coupon.title + ' ×' + count : coupon.title;
-    if (descEl) descEl.textContent = count > 1 ? '共' + count + '张，多城市通用 · ' + coupon.desc : coupon.desc;
-    if (tipEl) tipEl.textContent = '可在美团骑行APP内使用';
-    if (iconEl) iconEl.textContent = getCouponEmoji(coupon.icon);
-    if (chk) chk.checked = getAutoSaveRewardPreference();
+  function showArrivalModal(cityId, distance, coupon) {
+    const city = cityById[cityId];
+    if (!city || !coupon) return;
+    const modal = document.getElementById('arrivalModal');
+    const nameEl = document.getElementById('arrivalCityName');
+    const distEl = document.getElementById('arrivalDistance');
+    const iconEl = document.getElementById('arrivalLandmarkIcon');
+    const titleEl = document.getElementById('arrivalLandmarkTitle');
+    const descEl = document.getElementById('arrivalLandmarkDesc');
+    const couponIconEl = document.getElementById('arrivalCouponIcon');
+    const couponTitleEl = document.getElementById('arrivalCouponTitle');
+    const couponDescEl = document.getElementById('arrivalCouponDesc');
+    if (nameEl) nameEl.textContent = city.name;
+    if (distEl) distEl.textContent = distance;
+    if (iconEl) iconEl.textContent = getLandmarkEmoji(city.icon);
+    if (titleEl) titleEl.textContent = city.name + ' · ' + city.landmark;
+    if (descEl) descEl.textContent = city.landmarkDesc;
+    if (couponIconEl) couponIconEl.textContent = getCouponEmoji(coupon.icon);
+    if (couponTitleEl) couponTitleEl.textContent = coupon.title;
+    if (couponDescEl) couponDescEl.textContent = coupon.desc;
     if (modal) {
       modal.classList.remove('hidden');
       modal.style.display = 'flex';
-      modal.style.visibility = 'visible';
+    }
+  }
+
+  function hideArrivalModal() {
+    const modal = document.getElementById('arrivalModal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.style.display = '';
+    }
+  }
+
+  function showCouponDetailInWallet(coupon, count) {
+    if (!coupon) return;
+    const modal = document.getElementById('couponModal');
+    const nameEl = document.getElementById('couponCityName');
+    const descEl = document.getElementById('couponDesc');
+    const iconEl = document.getElementById('couponIcon');
+    if (nameEl) nameEl.textContent = (count > 1 ? coupon.title + ' ×' + count : coupon.title);
+    if (descEl) descEl.textContent = count > 1 ? '共' + count + '张 · ' + coupon.desc : coupon.desc;
+    if (iconEl) iconEl.textContent = getCouponEmoji(coupon.icon);
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.style.display = 'flex';
     }
   }
 
@@ -312,7 +290,6 @@
     if (modal) {
       modal.classList.add('hidden');
       modal.style.display = '';
-      modal.style.visibility = '';
     }
   }
 
@@ -340,7 +317,7 @@
           '<div class="wallet-card-desc">' + coupon.desc + '</div></div>';
         card.addEventListener('click', () => {
           hideWalletModal();
-          showCouponModal(coupon, count, null);
+          showCouponDetailInWallet(coupon, count);
         });
         list.appendChild(card);
       });
@@ -427,17 +404,6 @@
     btnAdd.onclick = onAddToWallet;
   }
 
-  function claimReward() {
-    if (!state.welcomeModalPending) return;
-    const { cityId } = state.welcomeModalPending;
-    hideWelcomeModal(true);
-    const coupon = pickRandomCoupon();
-    state.rewardClaimed.set(cityId, coupon);
-    state.totalEnergy += 50;
-    updateUI();
-    showCouponModal(coupon, 1, cityId);
-  }
-
   function depart() {
     const options = getNextCityOptions();
     if (state.isMoving || state.fuel < FUEL_PER_TRIP || options.length === 0) return;
@@ -452,18 +418,14 @@
     animateAvatarToCity(nextId, (wasNew) => {
       updateUI();
       if (wasNew) {
+        const coupon = pickRandomCoupon();
+        state.rewardClaimed.set(nextId, coupon);
+        state.totalEnergy += 50;
         requestAnimationFrame(() => {
           triggerNodeUnlockEffect(nextId);
           requestAnimationFrame(() => {
-            if (getAutoSaveRewardPreference()) {
-              const coupon = pickRandomCoupon();
-              state.rewardClaimed.set(nextId, coupon);
-              state.totalEnergy += 50;
-              updateUI();
-              checkAndShowGrandPrize();
-            } else {
-              showWelcomeModal(nextId, distance);
-            }
+            showArrivalModal(nextId, distance, coupon);
+            updateUI();
           });
         });
       }
@@ -485,13 +447,13 @@
     document.getElementById('btnCloseCityCards').addEventListener('click', hideCityCardsModal);
     document.getElementById('btnWallet').addEventListener('click', showWalletModal);
     document.getElementById('btnCloseWallet').addEventListener('click', hideWalletModal);
-    document.getElementById('btnClaimReward').addEventListener('click', claimReward);
-    document.getElementById('btnCloseModal').addEventListener('click', hideWelcomeModal);
-    document.getElementById('btnCloseCoupon').addEventListener('click', () => {
-      const chk = document.getElementById('chkAutoSaveReward');
-      if (chk && chk.checked) setAutoSaveRewardPreference(true);
-      hideCouponModal();
+    document.getElementById('btnArrivalClose').addEventListener('click', () => {
+      hideArrivalModal();
       checkAndShowGrandPrize();
+      updateUI();
+    });
+    document.getElementById('btnCloseCoupon').addEventListener('click', () => {
+      hideCouponModal();
       updateUI();
     });
   }

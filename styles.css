@@ -845,7 +845,75 @@ body {
   opacity: 0.6;
 }
 
-/* ========== 城市地标卡片 / 优惠券详情 ========== */
+/* ========== 到达城市卡片（欢迎语+城市地标） ========== */
+.arrival-card {
+  max-width: 320px;
+}
+
+.arrival-desc {
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.arrival-landmark {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #e8f4fc, #d4e8f7);
+  border: 1px solid rgba(74, 122, 184, 0.35);
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.arrival-landmark-icon {
+  font-size: 36px;
+  flex-shrink: 0;
+}
+
+.arrival-landmark-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.arrival-landmark-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.arrival-coupon {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #fff8e6, #fffbe6);
+  border: 1px solid var(--meituan-yellow-dark);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.arrival-coupon-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.arrival-coupon-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.arrival-coupon-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* ========== 优惠券详情（卡包内查看） ========== */
 .landmark-card-section {
   padding: 16px;
   background: linear-gradient(135deg, #e8f4fc, #d4e8f7);
