@@ -300,12 +300,20 @@
     if (tipEl) tipEl.textContent = '可在美团骑行APP内使用';
     if (iconEl) iconEl.textContent = getCouponEmoji(coupon.icon);
     if (chk) chk.checked = getAutoSaveRewardPreference();
-    if (modal) modal.classList.remove('hidden');
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.style.display = 'flex';
+      modal.style.visibility = 'visible';
+    }
   }
 
   function hideCouponModal() {
     const modal = document.getElementById('couponModal');
-    if (modal) modal.classList.add('hidden');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.style.display = '';
+      modal.style.visibility = '';
+    }
   }
 
   function showWalletModal() {
@@ -426,13 +434,8 @@
     const coupon = pickRandomCoupon();
     state.rewardClaimed.set(cityId, coupon);
     state.totalEnergy += 50;
-    if (getAutoSaveRewardPreference()) {
-      updateUI();
-      checkAndShowGrandPrize();
-    } else {
-      showCouponModal(coupon, 1, cityId);
-      updateUI();
-    }
+    updateUI();
+    showCouponModal(coupon, 1, cityId);
   }
 
   function depart() {
@@ -452,7 +455,15 @@
         requestAnimationFrame(() => {
           triggerNodeUnlockEffect(nextId);
           requestAnimationFrame(() => {
-            showWelcomeModal(nextId, distance);
+            if (getAutoSaveRewardPreference()) {
+              const coupon = pickRandomCoupon();
+              state.rewardClaimed.set(nextId, coupon);
+              state.totalEnergy += 50;
+              updateUI();
+              checkAndShowGrandPrize();
+            } else {
+              showWelcomeModal(nextId, distance);
+            }
           });
         });
       }
