@@ -251,19 +251,26 @@
     return icon === 'bike' ? '🚴' : '🎫';
   }
 
-  function showCouponModal(cityId) {
-    const city = cityById[cityId];
-    const coupon = state.rewardClaimed.get(cityId);
-    if (!city || !coupon) return;
+  function showCouponModal(coupon, count) {
+    if (!coupon) return;
+    if (typeof count !== 'number') count = 1;
     const modal = document.getElementById('couponModal');
     const nameEl = document.getElementById('couponCityName');
     const descEl = document.getElementById('couponDesc');
     const landmarkEl = document.getElementById('couponLandmark');
     const tipEl = document.getElementById('couponTip');
     const iconEl = document.getElementById('couponIcon');
-    if (nameEl) nameEl.textContent = city.name + ' · ' + coupon.title;
+    if (nameEl) nameEl.textContent = count > 1 ? coupon.title + ' ×' + count : coupon.title;
     if (descEl) descEl.textContent = coupon.desc;
-    if (landmarkEl) landmarkEl.textContent = city.landmark + ' · ' + city.landmarkDesc;
+    if (landmarkEl) {
+      if (count > 1) {
+        landmarkEl.textContent = '共' + count + '张，多城市通用';
+        landmarkEl.style.display = '';
+      } else {
+        landmarkEl.textContent = '';
+        landmarkEl.style.display = 'none';
+      }
+    }
     if (tipEl) tipEl.textContent = '可在美团骑行APP内使用';
     if (iconEl) iconEl.textContent = getCouponEmoji(coupon.icon);
     if (modal) modal.classList.remove('hidden');
@@ -283,18 +290,22 @@
     if (entries.length === 0) {
       list.innerHTML = '<div class="wallet-empty"><div class="wallet-empty-icon">🎫</div><p>暂无优惠券<br>骑行到达新城市并领取即可随机获得美团骑行券</p></div>';
     } else {
+      const grouped = {};
       entries.forEach(([cityId, coupon]) => {
-        const city = cityById[cityId];
-        if (!city || !coupon) return;
+        if (!coupon) return;
+        const key = coupon.id || (coupon.title + coupon.desc);
+        if (!grouped[key]) grouped[key] = { coupon, count: 0 };
+        grouped[key].count += 1;
+      });
+      Object.values(grouped).forEach(({ coupon, count }) => {
         const card = document.createElement('div');
         card.className = 'wallet-card';
-        card.dataset.cityId = cityId;
         card.innerHTML = '<div class="wallet-card-icon">' + getCouponEmoji(coupon.icon) + '</div>' +
-          '<div class="wallet-card-body"><div class="wallet-card-city">' + city.name + ' · ' + coupon.title + '</div>' +
+          '<div class="wallet-card-body"><div class="wallet-card-city">' + coupon.title + (count > 1 ? ' ×' + count : '') + '</div>' +
           '<div class="wallet-card-desc">' + coupon.desc + '</div></div>';
         card.addEventListener('click', () => {
           hideWalletModal();
-          showCouponModal(cityId);
+          showCouponModal(coupon, count);
         });
         list.appendChild(card);
       });
@@ -340,7 +351,7 @@
     const coupon = pickRandomCoupon();
     state.rewardClaimed.set(cityId, coupon);
     state.totalEnergy += 50;
-    showCouponModal(cityId);
+    showCouponModal(coupon, 1);
     updateUI();
   }
 
