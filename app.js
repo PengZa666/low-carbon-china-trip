@@ -27,20 +27,16 @@
   CITIES.forEach(c => { cityById[c.id] = c; });
 
   const SKIP_REWARD_ANIM_KEY = 'lowCarbon_skipRewardAnim';
-  let skipRewardAnimPreference = (function () {
+
+  function getSkipRewardAnimPreference() {
     try {
       return localStorage.getItem(SKIP_REWARD_ANIM_KEY) === '1';
     } catch (e) {
       return false;
     }
-  })();
-
-  function getSkipRewardAnimPreference() {
-    return skipRewardAnimPreference;
   }
 
   function setSkipRewardAnimPreference(checked) {
-    skipRewardAnimPreference = !!checked;
     try {
       localStorage.setItem(SKIP_REWARD_ANIM_KEY, checked ? '1' : '0');
     } catch (e) {}
@@ -256,50 +252,38 @@
     return '🎫';
   }
 
-  function showArrivalModal(cityId, distance, coupon) {
+  function showArrivalWelcomeCard(cityId, distance, coupon) {
     const city = cityById[cityId];
     if (!city || !coupon) return;
-    const chk = document.getElementById('chkSkipRewardAnim');
-    if (chk) {
-      chk.checked = getSkipRewardAnimPreference();
-      chk.onchange = function () {
-        setSkipRewardAnimPreference(chk.checked);
-      };
-    }
-    const modal = document.getElementById('arrivalModal');
-    const nameEl = document.getElementById('arrivalCityName');
-    const distEl = document.getElementById('arrivalDistance');
-    const iconEl = document.getElementById('arrivalLandmarkIcon');
-    const titleEl = document.getElementById('arrivalLandmarkTitle');
-    const descEl = document.getElementById('arrivalLandmarkDesc');
-    const couponIconEl = document.getElementById('arrivalCouponIcon');
-    const couponTitleEl = document.getElementById('arrivalCouponTitle');
-    const couponDescEl = document.getElementById('arrivalCouponDesc');
-    if (nameEl) nameEl.textContent = city.name;
-    if (distEl) distEl.textContent = distance;
-    if (iconEl) iconEl.textContent = getLandmarkEmoji(city.icon);
-    if (titleEl) titleEl.textContent = city.name + ' · ' + city.landmark;
-    if (descEl) descEl.textContent = city.landmarkDesc;
-    if (couponIconEl) couponIconEl.textContent = getCouponEmoji(coupon.icon);
-    if (couponTitleEl) couponTitleEl.textContent = coupon.title;
-    if (couponDescEl) couponDescEl.textContent = coupon.desc;
-    if (modal) {
-      document.body.appendChild(modal);
-      modal.classList.remove('hidden');
-      modal.style.setProperty('display', 'flex', 'important');
-      modal.style.visibility = 'visible';
-      modal.style.opacity = '1';
-      modal.style.zIndex = '9999';
-    }
-  }
 
-  function hideArrivalModal() {
-    const modal = document.getElementById('arrivalModal');
-    if (modal) {
-      modal.classList.add('hidden');
-      modal.style.cssText = '';
-      modal.style.zIndex = '';
-    }
+    var overlay = document.createElement('div');
+    overlay.id = 'arrivalWelcomeOverlay';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px;';
+    var skipChecked = getSkipRewardAnimPreference();
+    overlay.innerHTML =
+      '<div class="modal-card glass arrival-card" style="max-width:340px;width:100%;padding:24px;border-radius:16px;background:rgba(255,255,255,0.95);">' +
+      '<h3 class="modal-title">欢迎来到' + city.name + '！</h3>' +
+      '<p class="arrival-desc">您已通过低碳骑行跨越了 <strong>' + distance + '</strong> 公里</p>' +
+      '<div class="arrival-landmark" style="display:flex;align-items:center;gap:12px;padding:12px;background:linear-gradient(135deg,#e8f4fc,#d4e8f7);border-radius:12px;margin:12px 0;">' +
+      '<span style="font-size:28px;">' + getLandmarkEmoji(city.icon) + '</span>' +
+      '<div><div style="font-weight:600;">' + city.name + ' · ' + city.landmark + '</div><div style="font-size:12px;color:#666;">' + city.landmarkDesc + '</div></div>' +
+      '</div>' +
+      '<div class="arrival-coupon" style="display:flex;align-items:center;gap:12px;padding:12px;background:linear-gradient(135deg,#fff8e6,#fffbe6);border-radius:12px;margin:12px 0;">' +
+      '<span style="font-size:28px;">' + getCouponEmoji(coupon.icon) + '</span>' +
+      '<div><div style="font-weight:600;">' + coupon.title + '</div><div style="font-size:12px;color:#666;">' + coupon.desc + '</div></div>' +
+      '</div>' +
+      '<label style="display:flex;align-items:center;gap:8px;margin:12px 0;font-size:13px;cursor:pointer;"><input type="checkbox" id="arrivalChkSkip" ' + (skipChecked ? 'checked' : '') + ' /><span>下次直接入库，不再弹出此卡片</span></label>' +
+      '<button type="button" class="btn-reward" id="arrivalBtnClose" style="display:block;width:100%;padding:12px;font-size:15px;font-weight:600;color:#1a1a1a;background:#ffd100;border:none;border-radius:10px;cursor:pointer;">收下了</button>' +
+      '</div>';
+    document.body.appendChild(overlay);
+
+    document.getElementById('arrivalBtnClose').onclick = function () {
+      var chk = document.getElementById('arrivalChkSkip');
+      if (chk && chk.checked) setSkipRewardAnimPreference(true);
+      overlay.remove();
+      checkAndShowGrandPrize();
+      updateUI();
+    };
   }
 
   function showCouponDetailInWallet(coupon, count) {
@@ -455,13 +439,13 @@
         state.totalEnergy += 50;
         triggerNodeUnlockEffect(nextId);
         updateUI();
-        setTimeout(() => {
+        setTimeout(function () {
           if (getSkipRewardAnimPreference()) {
             checkAndShowGrandPrize();
           } else {
-            showArrivalModal(nextId, distance, coupon);
+            showArrivalWelcomeCard(nextId, distance, coupon);
           }
-        }, 150);
+        }, 100);
       }
     });
   }
@@ -481,13 +465,6 @@
     document.getElementById('btnCloseCityCards').addEventListener('click', hideCityCardsModal);
     document.getElementById('btnWallet').addEventListener('click', showWalletModal);
     document.getElementById('btnCloseWallet').addEventListener('click', hideWalletModal);
-    document.getElementById('btnArrivalClose').addEventListener('click', () => {
-      const chk = document.getElementById('chkSkipRewardAnim');
-      if (chk) setSkipRewardAnimPreference(chk.checked);
-      hideArrivalModal();
-      checkAndShowGrandPrize();
-      updateUI();
-    });
     document.getElementById('btnCloseCoupon').addEventListener('click', () => {
       hideCouponModal();
       updateUI();
