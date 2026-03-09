@@ -143,6 +143,33 @@
     </footer>
   </div>
 
+  <!-- 到达城市弹窗：欢迎语 + 城市地标 -->
+  <div class="modal-overlay hidden" id="arrivalModal">
+    <div class="modal-card glass arrival-card">
+      <h3 class="modal-title">欢迎来到<span id="arrivalCityName">北京</span>！</h3>
+      <p class="arrival-desc">您已通过低碳骑行跨越了 <strong id="arrivalDistance">0</strong> 公里</p>
+      <div class="arrival-landmark">
+        <span class="arrival-landmark-icon" id="arrivalLandmarkIcon">🏯</span>
+        <div>
+          <div class="arrival-landmark-title" id="arrivalLandmarkTitle">北京 · 天坛</div>
+          <div class="arrival-landmark-desc" id="arrivalLandmarkDesc">北京地标 · 祈年殿</div>
+        </div>
+      </div>
+      <div class="arrival-coupon">
+        <span class="arrival-coupon-icon" id="arrivalCouponIcon">🚴</span>
+        <div>
+          <div class="arrival-coupon-title" id="arrivalCouponTitle">免费骑行券</div>
+          <div class="arrival-coupon-desc" id="arrivalCouponDesc">已存入卡包</div>
+        </div>
+      </div>
+      <label class="arrival-skip-opt">
+        <input type="checkbox" id="chkSkipRewardAnim" />
+        <span>下次直接入库，不再弹出此卡片</span>
+      </label>
+      <button type="button" class="btn-reward" id="btnArrivalClose">收下了</button>
+    </div>
+  </div>
+
   <!-- 城市卡片弹窗：已打卡城市与地标 -->
   <div class="modal-overlay hidden" id="cityCardsModal">
     <div class="modal-card glass city-cards-modal">
