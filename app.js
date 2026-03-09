@@ -370,13 +370,7 @@
     if (state.unlockedIds.size !== CITIES.length || state.allMapRewardClaimed) return;
     const grandPrize = typeof GRAND_PRIZE_COUPON !== 'undefined' ? GRAND_PRIZE_COUPON : null;
     if (!grandPrize) return;
-    if (getAutoSaveRewardPreference()) {
-      state.rewardClaimed.set('grand_prize', grandPrize);
-      state.allMapRewardClaimed = true;
-      updateUI();
-    } else {
-      setTimeout(showGrandPrizeModal, 300);
-    }
+    setTimeout(showGrandPrizeModal, 300);
   }
 
   function showGrandPrizeModal() {
@@ -399,14 +393,10 @@
         giftBox.style.display = 'none';
         giftOpened.classList.remove('hidden');
         giftOpened.style.display = 'block';
-        const chk = document.getElementById('chkAutoSaveGrandPrize');
-        if (chk) chk.checked = getAutoSaveRewardPreference();
       }, 450);
     }
 
     function onAddToWallet() {
-      const chk = document.getElementById('chkAutoSaveGrandPrize');
-      if (chk && chk.checked) setAutoSaveRewardPreference(true);
       const coupon = typeof GRAND_PRIZE_COUPON !== 'undefined' ? GRAND_PRIZE_COUPON : null;
       if (coupon) {
         state.rewardClaimed.set('grand_prize', coupon);

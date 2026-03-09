@@ -48,6 +48,19 @@ body {
   background: var(--bg-panel);
 }
 
+.game-tip {
+  margin: 0 0 12px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+  background: linear-gradient(135deg, #fff8e6, #fffbe6);
+  border: 1px solid var(--meituan-yellow-dark);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(255, 209, 0, 0.15);
+}
+
 .header-left {
   display: flex;
   align-items: baseline;
@@ -986,6 +999,3 @@ body {
   color: var(--text-secondary);
 }
 
-.grand-prize-opt {
-  margin-bottom: 12px;
-}
