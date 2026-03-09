@@ -26,6 +26,26 @@
   const cityById = {};
   CITIES.forEach(c => { cityById[c.id] = c; });
 
+  const SKIP_REWARD_ANIM_KEY = 'lowCarbon_skipRewardAnim';
+  let skipRewardAnimPreference = (function () {
+    try {
+      return localStorage.getItem(SKIP_REWARD_ANIM_KEY) === '1';
+    } catch (e) {
+      return false;
+    }
+  })();
+
+  function getSkipRewardAnimPreference() {
+    return skipRewardAnimPreference;
+  }
+
+  function setSkipRewardAnimPreference(checked) {
+    skipRewardAnimPreference = !!checked;
+    try {
+      localStorage.setItem(SKIP_REWARD_ANIM_KEY, checked ? '1' : '0');
+    } catch (e) {}
+  }
+
   // 单向链：仅返回当前城市的下一个目的地
   function getNextCityOptions() {
     return ROUTES.filter(r => r.from === state.currentCityId);
@@ -239,6 +259,13 @@
   function showArrivalModal(cityId, distance, coupon) {
     const city = cityById[cityId];
     if (!city || !coupon) return;
+    const chk = document.getElementById('chkSkipRewardAnim');
+    if (chk) {
+      chk.checked = getSkipRewardAnimPreference();
+      chk.onchange = function () {
+        setSkipRewardAnimPreference(chk.checked);
+      };
+    }
     const modal = document.getElementById('arrivalModal');
     const nameEl = document.getElementById('arrivalCityName');
     const distEl = document.getElementById('arrivalDistance');
@@ -424,8 +451,13 @@
         requestAnimationFrame(() => {
           triggerNodeUnlockEffect(nextId);
           requestAnimationFrame(() => {
-            showArrivalModal(nextId, distance, coupon);
-            updateUI();
+            if (getSkipRewardAnimPreference()) {
+              updateUI();
+              checkAndShowGrandPrize();
+            } else {
+              showArrivalModal(nextId, distance, coupon);
+              updateUI();
+            }
           });
         });
       }
@@ -448,6 +480,8 @@
     document.getElementById('btnWallet').addEventListener('click', showWalletModal);
     document.getElementById('btnCloseWallet').addEventListener('click', hideWalletModal);
     document.getElementById('btnArrivalClose').addEventListener('click', () => {
+      const chk = document.getElementById('chkSkipRewardAnim');
+      if (chk) setSkipRewardAnimPreference(chk.checked);
       hideArrivalModal();
       checkAndShowGrandPrize();
       updateUI();
