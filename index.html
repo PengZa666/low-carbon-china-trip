@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>低碳中国行 - 美团单车地图探索版</title>
-  <link rel="stylesheet" href="styles.css?v=7" />
+  <link rel="stylesheet" href="styles.css?v=8" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -197,17 +197,24 @@
     </div>
   </div>
 
-  <!-- 纪念品/优惠券详情弹窗（第二张卡片） -->
+  <!-- 城市地标卡片（第二张卡片：到达新城市后弹出） -->
   <div class="modal-overlay hidden" id="couponModal">
     <div class="modal-card glass coupon-card">
-      <div class="coupon-icon" id="couponIcon"></div>
-      <h3 class="modal-title" id="couponCityName">北京 · 免费骑行券</h3>
-      <p class="coupon-landmark" id="couponLandmark">北京地标 · 祈年殿</p>
-      <p class="coupon-desc" id="couponDesc">天坛文创满50减10</p>
-      <p class="coupon-tip" id="couponTip">可在该城市合作商户使用</p>
+      <div class="landmark-card-section" id="landmarkCardSection">
+        <div class="landmark-card-icon" id="landmarkCardIcon">🏯</div>
+        <h3 class="modal-title landmark-card-title" id="landmarkCardTitle">北京 · 天坛</h3>
+        <p class="landmark-card-desc" id="landmarkCardDesc">北京地标 · 祈年殿</p>
+      </div>
+      <div class="coupon-reward-section">
+        <p class="coupon-reward-label">获得的骑行券</p>
+        <div class="coupon-icon" id="couponIcon"></div>
+        <h4 class="coupon-title" id="couponCityName">免费骑行券</h4>
+        <p class="coupon-desc" id="couponDesc">首单免费骑30分钟</p>
+        <p class="coupon-tip" id="couponTip">可在美团骑行APP内使用</p>
+      </div>
       <label class="reward-auto-save-opt coupon-modal-opt">
         <input type="checkbox" id="chkAutoSaveReward" />
-        <span>不再显示奖励动画，直接存入卡包</span>
+        <span>下次不再显示城市地标卡片，直接存入卡包</span>
       </label>
       <button type="button" class="btn-close-modal" id="btnCloseCoupon">收下了</button>
     </div>
@@ -216,6 +223,6 @@
   <script src="china_outline.js"></script>
   <script src="province_paths.js"></script>
   <script src="data.js"></script>
-  <script src="app.js?v=7"></script>
+  <script src="app.js?v=8"></script>
 </body>
 </html>

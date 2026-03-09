@@ -845,16 +845,55 @@ body {
   opacity: 0.6;
 }
 
-/* ========== 优惠券详情 ========== */
-.coupon-card .modal-title {
-  margin-top: 12px;
+/* ========== 城市地标卡片 / 优惠券详情 ========== */
+.landmark-card-section {
+  padding: 16px;
+  background: linear-gradient(135deg, #e8f4fc, #d4e8f7);
+  border: 1px solid rgba(74, 122, 184, 0.35);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  text-align: center;
 }
 
-.coupon-landmark {
-  margin: 0 0 8px;
+.landmark-card-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+
+.landmark-card-title {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.landmark-card-desc {
+  margin: 0;
   font-size: 13px;
   color: var(--text-secondary);
+}
+
+.coupon-reward-section {
+  padding-bottom: 12px;
+}
+
+.coupon-reward-label {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
   text-align: center;
+}
+
+.coupon-title {
+  margin: 8px 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.coupon-card .modal-title {
+  margin-top: 12px;
 }
 
 .coupon-tip {

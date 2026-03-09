@@ -271,27 +271,32 @@
     return '🎫';
   }
 
-  function showCouponModal(coupon, count) {
+  function showCouponModal(coupon, count, cityId) {
     if (!coupon) return;
     if (typeof count !== 'number') count = 1;
     const modal = document.getElementById('couponModal');
+    const landmarkSection = document.getElementById('landmarkCardSection');
+    const landmarkIconEl = document.getElementById('landmarkCardIcon');
+    const landmarkTitleEl = document.getElementById('landmarkCardTitle');
+    const landmarkDescEl = document.getElementById('landmarkCardDesc');
     const nameEl = document.getElementById('couponCityName');
     const descEl = document.getElementById('couponDesc');
-    const landmarkEl = document.getElementById('couponLandmark');
     const tipEl = document.getElementById('couponTip');
     const iconEl = document.getElementById('couponIcon');
     const chk = document.getElementById('chkAutoSaveReward');
-    if (nameEl) nameEl.textContent = count > 1 ? coupon.title + ' ×' + count : coupon.title;
-    if (descEl) descEl.textContent = coupon.desc;
-    if (landmarkEl) {
-      if (count > 1) {
-        landmarkEl.textContent = '共' + count + '张，多城市通用';
-        landmarkEl.style.display = '';
-      } else {
-        landmarkEl.textContent = '';
-        landmarkEl.style.display = 'none';
-      }
+
+    if (cityId && cityById[cityId]) {
+      const city = cityById[cityId];
+      if (landmarkSection) landmarkSection.style.display = '';
+      if (landmarkIconEl) landmarkIconEl.textContent = getLandmarkEmoji(city.icon);
+      if (landmarkTitleEl) landmarkTitleEl.textContent = city.name + ' · ' + city.landmark;
+      if (landmarkDescEl) landmarkDescEl.textContent = city.landmarkDesc;
+    } else {
+      if (landmarkSection) landmarkSection.style.display = 'none';
     }
+
+    if (nameEl) nameEl.textContent = count > 1 ? coupon.title + ' ×' + count : coupon.title;
+    if (descEl) descEl.textContent = count > 1 ? '共' + count + '张，多城市通用 · ' + coupon.desc : coupon.desc;
     if (tipEl) tipEl.textContent = '可在美团骑行APP内使用';
     if (iconEl) iconEl.textContent = getCouponEmoji(coupon.icon);
     if (chk) chk.checked = getAutoSaveRewardPreference();
@@ -327,7 +332,7 @@
           '<div class="wallet-card-desc">' + coupon.desc + '</div></div>';
         card.addEventListener('click', () => {
           hideWalletModal();
-          showCouponModal(coupon, count);
+          showCouponModal(coupon, count, null);
         });
         list.appendChild(card);
       });
@@ -425,7 +430,7 @@
       updateUI();
       checkAndShowGrandPrize();
     } else {
-      showCouponModal(coupon, 1);
+      showCouponModal(coupon, 1, cityId);
       updateUI();
     }
   }
