@@ -26,6 +26,22 @@
   const cityById = {};
   CITIES.forEach(c => { cityById[c.id] = c; });
 
+  const AUTO_SAVE_KEY = 'lowCarbon_autoSaveReward';
+
+  function getAutoSaveRewardPreference() {
+    try {
+      return localStorage.getItem(AUTO_SAVE_KEY) === '1';
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function setAutoSaveRewardPreference(checked) {
+    try {
+      localStorage.setItem(AUTO_SAVE_KEY, checked ? '1' : '0');
+    } catch (e) {}
+  }
+
   // 单向链：仅返回当前城市的下一个目的地
   function getNextCityOptions() {
     return ROUTES.filter(r => r.from === state.currentCityId);
@@ -237,8 +253,10 @@
     const modal = document.getElementById('welcomeModal');
     const nameEl = document.getElementById('modalCityName');
     const distEl = document.getElementById('modalDistance');
+    const chk = document.getElementById('chkAutoSaveReward');
     if (nameEl) nameEl.textContent = city.name;
     if (distEl) distEl.textContent = distance;
+    if (chk) chk.checked = getAutoSaveRewardPreference();
     if (modal) modal.classList.remove('hidden');
   }
 
@@ -352,7 +370,13 @@
     if (state.unlockedIds.size !== CITIES.length || state.allMapRewardClaimed) return;
     const grandPrize = typeof GRAND_PRIZE_COUPON !== 'undefined' ? GRAND_PRIZE_COUPON : null;
     if (!grandPrize) return;
-    setTimeout(showGrandPrizeModal, 300);
+    if (getAutoSaveRewardPreference()) {
+      state.rewardClaimed.set('grand_prize', grandPrize);
+      state.allMapRewardClaimed = true;
+      updateUI();
+    } else {
+      setTimeout(showGrandPrizeModal, 300);
+    }
   }
 
   function showGrandPrizeModal() {
@@ -375,10 +399,14 @@
         giftBox.style.display = 'none';
         giftOpened.classList.remove('hidden');
         giftOpened.style.display = 'block';
+        const chk = document.getElementById('chkAutoSaveGrandPrize');
+        if (chk) chk.checked = getAutoSaveRewardPreference();
       }, 450);
     }
 
     function onAddToWallet() {
+      const chk = document.getElementById('chkAutoSaveGrandPrize');
+      if (chk && chk.checked) setAutoSaveRewardPreference(true);
       const coupon = typeof GRAND_PRIZE_COUPON !== 'undefined' ? GRAND_PRIZE_COUPON : null;
       if (coupon) {
         state.rewardClaimed.set('grand_prize', coupon);
@@ -399,12 +427,14 @@
   function claimReward() {
     if (!state.welcomeModalPending) return;
     const { cityId } = state.welcomeModalPending;
+    const chk = document.getElementById('chkAutoSaveReward');
+    if (chk && chk.checked) setAutoSaveRewardPreference(true);
     hideWelcomeModal(true);
     const coupon = pickRandomCoupon();
     state.rewardClaimed.set(cityId, coupon);
     state.totalEnergy += 50;
-    showCouponModal(coupon, 1);
     updateUI();
+    checkAndShowGrandPrize();
   }
 
   function depart() {
@@ -424,7 +454,15 @@
         requestAnimationFrame(() => {
           triggerNodeUnlockEffect(nextId);
         });
-        showWelcomeModal(nextId, distance);
+        if (getAutoSaveRewardPreference()) {
+          const coupon = pickRandomCoupon();
+          state.rewardClaimed.set(nextId, coupon);
+          state.totalEnergy += 50;
+          updateUI();
+          checkAndShowGrandPrize();
+        } else {
+          showWelcomeModal(nextId, distance);
+        }
       }
     });
   }
@@ -448,7 +486,6 @@
     document.getElementById('btnCloseModal').addEventListener('click', hideWelcomeModal);
     document.getElementById('btnCloseCoupon').addEventListener('click', () => {
       hideCouponModal();
-      checkAndShowGrandPrize();
       updateUI();
     });
   }

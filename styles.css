@@ -580,11 +580,27 @@ body {
 }
 
 .modal-desc {
-  margin: 0 0 20px;
+  margin: 0 0 16px;
   font-size: 14px;
   color: var(--text-secondary);
   text-align: center;
   line-height: 1.5;
+}
+
+.reward-auto-save-opt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.reward-auto-save-opt input {
+  cursor: pointer;
 }
 
 .btn-reward {
@@ -964,4 +980,8 @@ body {
 .gift-coupon-desc {
   font-size: 13px;
   color: var(--text-secondary);
+}
+
+.grand-prize-opt {
+  margin-bottom: 12px;
 }

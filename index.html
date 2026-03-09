@@ -145,6 +145,10 @@
     <div class="modal-card glass">
       <h3 class="modal-title">欢迎来到<span id="modalCityName">北京</span>！</h3>
       <p class="modal-desc">您已通过低碳骑行跨越了 <strong id="modalDistance">0</strong> 公里。</p>
+      <label class="reward-auto-save-opt">
+        <input type="checkbox" id="chkAutoSaveReward" />
+        <span>不再显示奖励动画，直接存入卡包</span>
+      </label>
       <button type="button" class="btn-reward" id="btnClaimReward">领取骑行券</button>
       <button type="button" class="btn-close-modal" id="btnCloseModal">稍后再说</button>
     </div>
@@ -188,6 +192,10 @@
             <div class="gift-coupon-title">免费月卡兑换券</div>
             <div class="gift-coupon-desc">30天无限次骑行，可在美团骑行APP兑换</div>
           </div>
+          <label class="reward-auto-save-opt grand-prize-opt">
+            <input type="checkbox" id="chkAutoSaveGrandPrize" />
+            <span>不再显示奖励动画，直接存入卡包</span>
+          </label>
           <button type="button" class="btn-reward" id="btnAddToWallet">放入卡包</button>
         </div>
       </div>
@@ -209,6 +217,6 @@
   <script src="china_outline.js"></script>
   <script src="province_paths.js"></script>
   <script src="data.js"></script>
-  <script src="app.js?v=3"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>
