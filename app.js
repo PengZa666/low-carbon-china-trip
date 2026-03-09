@@ -19,7 +19,8 @@
     unlockedIds: new Set(['beijing']),
     rewardClaimed: new Map([['beijing', pickRandomCoupon()]]),
     isMoving: false,
-    welcomeModalPending: null
+    welcomeModalPending: null,
+    allMapRewardClaimed: false
   };
 
   const cityById = {};
@@ -241,14 +242,17 @@
     if (modal) modal.classList.remove('hidden');
   }
 
-  function hideWelcomeModal() {
+  function hideWelcomeModal(skipGrandPrizeCheck) {
     const modal = document.getElementById('welcomeModal');
     if (modal) modal.classList.add('hidden');
     state.welcomeModalPending = null;
+    if (!skipGrandPrizeCheck) checkAndShowGrandPrize();
   }
 
   function getCouponEmoji(icon) {
-    return icon === 'bike' ? '🚴' : '🎫';
+    if (icon === 'bike') return '🚴';
+    if (icon === 'monthly') return '👑';
+    return '🎫';
   }
 
   function showCouponModal(coupon, count) {
@@ -344,10 +348,58 @@
     if (modal) modal.classList.add('hidden');
   }
 
+  function checkAndShowGrandPrize() {
+    if (state.unlockedIds.size !== CITIES.length || state.allMapRewardClaimed) return;
+    const grandPrize = typeof GRAND_PRIZE_COUPON !== 'undefined' ? GRAND_PRIZE_COUPON : null;
+    if (!grandPrize) return;
+    setTimeout(showGrandPrizeModal, 300);
+  }
+
+  function showGrandPrizeModal() {
+    const modal = document.getElementById('grandPrizeModal');
+    const giftBox = document.getElementById('giftBox');
+    const giftOpened = document.getElementById('giftOpened');
+    const btnAdd = document.getElementById('btnAddToWallet');
+    if (!modal || !giftBox || !giftOpened || !btnAdd) return;
+    giftBox.classList.remove('opened');
+    giftBox.classList.remove('hidden');
+    giftOpened.classList.add('hidden');
+    modal.classList.remove('hidden');
+
+    function onGiftClick() {
+      giftBox.classList.add('opened');
+      giftBox.style.cursor = 'default';
+      giftBox.onclick = null;
+      setTimeout(() => {
+        giftBox.classList.add('hidden');
+        giftBox.style.display = 'none';
+        giftOpened.classList.remove('hidden');
+        giftOpened.style.display = 'block';
+      }, 450);
+    }
+
+    function onAddToWallet() {
+      const coupon = typeof GRAND_PRIZE_COUPON !== 'undefined' ? GRAND_PRIZE_COUPON : null;
+      if (coupon) {
+        state.rewardClaimed.set('grand_prize', coupon);
+        state.allMapRewardClaimed = true;
+      }
+      modal.classList.add('hidden');
+      giftBox.classList.remove('opened', 'hidden');
+      giftBox.style.display = '';
+      giftBox.style.cursor = 'pointer';
+      giftBox.onclick = onGiftClick;
+      updateUI();
+    }
+
+    giftBox.onclick = onGiftClick;
+    btnAdd.onclick = onAddToWallet;
+  }
+
   function claimReward() {
     if (!state.welcomeModalPending) return;
     const { cityId } = state.welcomeModalPending;
-    hideWelcomeModal();
+    hideWelcomeModal(true);
     const coupon = pickRandomCoupon();
     state.rewardClaimed.set(cityId, coupon);
     state.totalEnergy += 50;
@@ -396,6 +448,7 @@
     document.getElementById('btnCloseModal').addEventListener('click', hideWelcomeModal);
     document.getElementById('btnCloseCoupon').addEventListener('click', () => {
       hideCouponModal();
+      checkAndShowGrandPrize();
       updateUI();
     });
   }

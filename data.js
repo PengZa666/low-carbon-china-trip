@@ -71,6 +71,14 @@ const ROUTES = [
   { from: 'harbin', to: 'beijing', distance: 964 }
 ];
 
+// 全图点亮大奖：免费月卡兑换券
+const GRAND_PRIZE_COUPON = {
+  id: 'monthly_card',
+  title: '免费月卡兑换券',
+  desc: '30天无限次骑行，可在美团骑行APP兑换',
+  icon: 'monthly'
+};
+
 // 美团骑行相关优惠券池（到达新城市随机获得其一）
 const MEITUAN_RIDING_COUPONS = [
   { id: 'free30', title: '免费骑行券', desc: '首单免费骑30分钟', icon: 'bike' },
