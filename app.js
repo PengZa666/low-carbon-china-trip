@@ -142,8 +142,8 @@
     const from = cityById[state.currentCityId];
     const to = cityById[toCityId];
     if (!from || !to) {
-    if (onComplete) onComplete();
-    return;
+      if (onComplete) onComplete(false);
+      return;
     }
     const avatar = document.getElementById('avatar');
     if (avatar) avatar.classList.add('riding');
@@ -440,12 +440,12 @@
         triggerNodeUnlockEffect(nextId);
         updateUI();
         setTimeout(function () {
-          if (getSkipRewardAnimPreference()) {
-            checkAndShowGrandPrize();
-          } else {
+          try {
             showArrivalWelcomeCard(nextId, distance, coupon);
+          } catch (e) {
+            console.error('showArrivalWelcomeCard error:', e);
           }
-        }, 100);
+        }, 50);
       }
     });
   }
@@ -481,6 +481,10 @@
     updateUI();
     bindEvents();
   }
+
+  window.debugShowArrival = function () {
+    showArrivalWelcomeCard('tianjin', 120, pickRandomCoupon());
+  };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
