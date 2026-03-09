@@ -48,16 +48,16 @@ body {
   background: var(--bg-panel);
 }
 
-.game-tip {
-  margin: 0 0 12px;
-  padding: 8px 16px;
+.game-tip.map-tip {
+  margin: 0;
+  padding: 10px 20px;
   font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
   text-align: center;
   background: linear-gradient(135deg, #fff8e6, #fffbe6);
-  border: 1px solid var(--meituan-yellow-dark);
-  border-radius: 8px;
+  border-bottom: 1px solid var(--meituan-yellow-dark);
+  border-radius: 0;
   box-shadow: 0 2px 8px rgba(255, 209, 0, 0.15);
 }
 
