@@ -27,16 +27,20 @@
   CITIES.forEach(c => { cityById[c.id] = c; });
 
   const SKIP_REWARD_ANIM_KEY = 'lowCarbon_skipRewardAnim';
-
-  function getSkipRewardAnimPreference() {
+  var skipRewardAnimPreference = (function () {
     try {
       return localStorage.getItem(SKIP_REWARD_ANIM_KEY) === '1';
     } catch (e) {
       return false;
     }
+  })();
+
+  function getSkipRewardAnimPreference() {
+    return !!skipRewardAnimPreference;
   }
 
   function setSkipRewardAnimPreference(checked) {
+    skipRewardAnimPreference = !!checked;
     try {
       localStorage.setItem(SKIP_REWARD_ANIM_KEY, checked ? '1' : '0');
     } catch (e) {}
@@ -277,8 +281,8 @@
     document.body.appendChild(overlay);
 
     document.getElementById('arrivalBtnClose').onclick = function () {
-      var chk = document.getElementById('arrivalChkSkip');
-      if (chk && chk.checked) setSkipRewardAnimPreference(true);
+      var chk = overlay.querySelector('#arrivalChkSkip');
+      setSkipRewardAnimPreference(chk ? chk.checked : false);
       overlay.remove();
       checkAndShowGrandPrize();
       updateUI();
