@@ -280,9 +280,15 @@
       '</div>';
     document.body.appendChild(overlay);
 
-    document.getElementById('arrivalBtnClose').onclick = function () {
-      var chk = overlay.querySelector('#arrivalChkSkip');
-      setSkipRewardAnimPreference(chk ? chk.checked : false);
+    var chk = overlay.querySelector('#arrivalChkSkip');
+    if (chk) {
+      chk.onchange = function () {
+        setSkipRewardAnimPreference(chk.checked);
+      };
+    }
+
+    overlay.querySelector('#arrivalBtnClose').onclick = function () {
+      if (chk) setSkipRewardAnimPreference(chk.checked);
       overlay.remove();
       checkAndShowGrandPrize();
       updateUI();
