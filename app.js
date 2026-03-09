@@ -284,11 +284,12 @@
     if (couponTitleEl) couponTitleEl.textContent = coupon.title;
     if (couponDescEl) couponDescEl.textContent = coupon.desc;
     if (modal) {
+      document.body.appendChild(modal);
       modal.classList.remove('hidden');
-      modal.style.display = 'flex';
-      modal.style.visibility = 'visible';
-      modal.style.opacity = '1';
-      modal.style.pointerEvents = 'auto';
+      modal.style.setProperty('display', 'flex', 'important');
+      modal.style.setProperty('visibility', 'visible', 'important');
+      modal.style.setProperty('opacity', '1', 'important');
+      modal.style.zIndex = '9999';
     }
   }
 
@@ -296,10 +297,8 @@
     const modal = document.getElementById('arrivalModal');
     if (modal) {
       modal.classList.add('hidden');
-      modal.style.display = '';
-      modal.style.visibility = '';
-      modal.style.opacity = '';
-      modal.style.pointerEvents = '';
+      modal.style.cssText = '';
+      modal.style.zIndex = '';
     }
   }
 
