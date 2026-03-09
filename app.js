@@ -446,8 +446,10 @@
       if (wasNew) {
         requestAnimationFrame(() => {
           triggerNodeUnlockEffect(nextId);
+          requestAnimationFrame(() => {
+            showWelcomeModal(nextId, distance);
+          });
         });
-        showWelcomeModal(nextId, distance);
       }
     });
   }
