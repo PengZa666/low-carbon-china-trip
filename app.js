@@ -286,6 +286,9 @@
     if (modal) {
       modal.classList.remove('hidden');
       modal.style.display = 'flex';
+      modal.style.visibility = 'visible';
+      modal.style.opacity = '1';
+      modal.style.pointerEvents = 'auto';
     }
   }
 
@@ -294,6 +297,9 @@
     if (modal) {
       modal.classList.add('hidden');
       modal.style.display = '';
+      modal.style.visibility = '';
+      modal.style.opacity = '';
+      modal.style.pointerEvents = '';
     }
   }
 
@@ -448,18 +454,15 @@
         const coupon = pickRandomCoupon();
         state.rewardClaimed.set(nextId, coupon);
         state.totalEnergy += 50;
-        requestAnimationFrame(() => {
-          triggerNodeUnlockEffect(nextId);
-          requestAnimationFrame(() => {
-            if (getSkipRewardAnimPreference()) {
-              updateUI();
-              checkAndShowGrandPrize();
-            } else {
-              showArrivalModal(nextId, distance, coupon);
-              updateUI();
-            }
-          });
-        });
+        triggerNodeUnlockEffect(nextId);
+        updateUI();
+        setTimeout(() => {
+          if (getSkipRewardAnimPreference()) {
+            checkAndShowGrandPrize();
+          } else {
+            showArrivalModal(nextId, distance, coupon);
+          }
+        }, 200);
       }
     });
   }
