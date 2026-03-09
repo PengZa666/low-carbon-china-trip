@@ -259,7 +259,6 @@
     var overlay = document.createElement('div');
     overlay.id = 'arrivalWelcomeOverlay';
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px;';
-    var skipChecked = getSkipRewardAnimPreference();
     overlay.innerHTML =
       '<div class="modal-card glass arrival-card" style="max-width:340px;width:100%;padding:24px;border-radius:16px;background:rgba(255,255,255,0.95);">' +
       '<h3 class="modal-title">欢迎来到' + city.name + '！</h3>' +
@@ -272,7 +271,7 @@
       '<span style="font-size:28px;">' + getCouponEmoji(coupon.icon) + '</span>' +
       '<div><div style="font-weight:600;">' + coupon.title + '</div><div style="font-size:12px;color:#666;">' + coupon.desc + '</div></div>' +
       '</div>' +
-      '<label style="display:flex;align-items:center;gap:8px;margin:12px 0;font-size:13px;cursor:pointer;"><input type="checkbox" id="arrivalChkSkip" ' + (skipChecked ? 'checked' : '') + ' /><span>下次直接入库，不再弹出此卡片</span></label>' +
+      '<label style="display:flex;align-items:center;gap:8px;margin:12px 0;font-size:13px;cursor:pointer;"><input type="checkbox" id="arrivalChkSkip" /><span>下次直接入库，不再弹出此卡片</span></label>' +
       '<button type="button" class="btn-reward" id="arrivalBtnClose" style="display:block;width:100%;padding:12px;font-size:15px;font-weight:600;color:#1a1a1a;background:#ffd100;border:none;border-radius:10px;cursor:pointer;">收下了</button>' +
       '</div>';
     document.body.appendChild(overlay);
@@ -441,9 +440,13 @@
         updateUI();
         setTimeout(function () {
           try {
-            showArrivalWelcomeCard(nextId, distance, coupon);
+            if (getSkipRewardAnimPreference()) {
+              checkAndShowGrandPrize();
+            } else {
+              showArrivalWelcomeCard(nextId, distance, coupon);
+            }
           } catch (e) {
-            console.error('showArrivalWelcomeCard error:', e);
+            console.error('arrival card error:', e);
           }
         }, 50);
       }
