@@ -4,6 +4,7 @@
 // 坐标由经纬度投影计算：x=(lon-73)/62*1000, y=(54-lat)/36*850，与地图同系
 const CITIES = [
   { id: 'beijing', name: '北京', x: 700, y: 333, landmark: '天坛', landmarkDesc: '北京地标 · 祈年殿', couponDesc: '天坛文创满50减10', icon: 'temple', provinceAdcode: 110000 },
+  { id: 'tianjin', name: '天津', x: 718, y: 345, landmark: '天津之眼', landmarkDesc: '永乐桥摩天轮', couponDesc: '天津狗不理包子券', icon: 'bridge', provinceAdcode: 120000 },
   { id: 'shijiazhuang', name: '石家庄', x: 670, y: 376, landmark: '艺术中心', landmarkDesc: '燕赵古都', couponDesc: '正定古城商户券', icon: 'art', provinceAdcode: 130000 },
   { id: 'taiyuan', name: '太原', x: 638, y: 381, landmark: '晋祠', landmarkDesc: '龙城晋韵', couponDesc: '山西面食满60减12', icon: 'antique', provinceAdcode: 140000 },
   { id: 'hohhot', name: '呼和浩特', x: 625, y: 311, landmark: '大召寺', landmarkDesc: '草原青城', couponDesc: '蒙餐满80减18', icon: 'grassland', provinceAdcode: 150000 },
@@ -37,7 +38,8 @@ const CITIES = [
 
 // 环游中国：最短路径闭环（TSP 近似优化）
 const ROUTES = [
-  { from: 'beijing', to: 'hohhot', distance: 352 },
+  { from: 'beijing', to: 'tianjin', distance: 120 },
+  { from: 'tianjin', to: 'hohhot', distance: 450 },
   { from: 'hohhot', to: 'shijiazhuang', distance: 356 },
   { from: 'shijiazhuang', to: 'taiyuan', distance: 146 },
   { from: 'taiyuan', to: 'xian', distance: 463 },
