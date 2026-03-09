@@ -421,8 +421,13 @@
     const coupon = pickRandomCoupon();
     state.rewardClaimed.set(cityId, coupon);
     state.totalEnergy += 50;
-    showCouponModal(coupon, 1);
-    updateUI();
+    if (getAutoSaveRewardPreference()) {
+      updateUI();
+      checkAndShowGrandPrize();
+    } else {
+      showCouponModal(coupon, 1);
+      updateUI();
+    }
   }
 
   function depart() {
@@ -442,15 +447,7 @@
         requestAnimationFrame(() => {
           triggerNodeUnlockEffect(nextId);
         });
-        if (getAutoSaveRewardPreference()) {
-          const coupon = pickRandomCoupon();
-          state.rewardClaimed.set(nextId, coupon);
-          state.totalEnergy += 50;
-          updateUI();
-          checkAndShowGrandPrize();
-        } else {
-          showWelcomeModal(nextId, distance);
-        }
+        showWelcomeModal(nextId, distance);
       }
     });
   }
